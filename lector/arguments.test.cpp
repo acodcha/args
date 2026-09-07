@@ -4108,7 +4108,21 @@ TEST(Lector, SingularArgumentDataStructureNamedOptional) {
   EXPECT_EQ(argument.options(), "-p <value>, --point <value>  Starting point.");
   EXPECT_TRUE(argument.execution().empty());
   argument.set_parsed_value(test::SecondPoint);
-  // TODO.
+  EXPECT_EQ(argument.label(), test::Label::Point);
+  EXPECT_EQ(argument.keys(), test::keys_data_structure());
+  EXPECT_EQ(argument.description(), "Starting point.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == test::FirstPoint);
+  EXPECT_TRUE(
+      argument.parsed_value().has_value() && argument.parsed_value().value() == test::SecondPoint);
+  EXPECT_EQ(argument.parsed_or_default_value(), test::SecondPoint);
+  EXPECT_EQ(argument.keys_with_value_type(), "-p <value>, --point <value>");
+  EXPECT_EQ(argument.usage(), "[--point <value>]");
+  EXPECT_EQ(argument.options(), "-p <value>, --point <value>  Starting point.");
+  EXPECT_EQ(argument.execution(), "--point 4 5 6");
 }
 
 TEST(Lector, SingularArgumentDataStructureNamedRequired) {
@@ -4138,8 +4152,8 @@ TEST(Lector, SingularArgumentDataStructurePositionalOptional) {
   EXPECT_EQ(argument.importance(), lector::Importance::Optional);
   EXPECT_EQ(argument.form(), lector::Form::Positional);
   EXPECT_EQ(argument.arity(), lector::Arity::Singular);
-  const std::optional<test::Point>& default_value{argument.default_value()};
-  EXPECT_TRUE(default_value.has_value() && default_value.value() == test::FirstPoint);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == test::FirstPoint);
   EXPECT_EQ(argument.parsed_value(), std::nullopt);
   EXPECT_EQ(argument.parsed_or_default_value(), test::FirstPoint);
   EXPECT_EQ(argument.keys_with_value_type(), "<value>");
@@ -4147,7 +4161,21 @@ TEST(Lector, SingularArgumentDataStructurePositionalOptional) {
   EXPECT_EQ(argument.options(), "<value>  Starting point.");
   EXPECT_TRUE(argument.execution().empty());
   argument.set_parsed_value(test::SecondPoint);
-  // TODO.
+  EXPECT_EQ(argument.label(), test::Label::Point);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Starting point.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == test::FirstPoint);
+  EXPECT_TRUE(
+      argument.parsed_value().has_value() && argument.parsed_value().value() == test::SecondPoint);
+  EXPECT_EQ(argument.parsed_or_default_value(), test::SecondPoint);
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "[<value>]");
+  EXPECT_EQ(argument.options(), "<value>  Starting point.");
+  EXPECT_EQ(argument.execution(), "4 5 6");
 }
 
 TEST(Lector, SingularArgumentDataStructurePositionalRequired) {
@@ -4194,8 +4222,8 @@ TEST(Lector, SingularArgumentEnumerationNamedOptional) {
   EXPECT_EQ(argument.importance(), lector::Importance::Optional);
   EXPECT_EQ(argument.form(), lector::Form::Named);
   EXPECT_EQ(argument.arity(), lector::Arity::Singular);
-  const std::optional<test::Shape>& default_value{argument.default_value()};
-  EXPECT_TRUE(default_value.has_value() && default_value.value() == test::Shape::Circle);
+  EXPECT_TRUE(argument.default_value().has_value()
+              && argument.default_value().value() == test::Shape::Circle);
   EXPECT_EQ(argument.parsed_value(), std::nullopt);
   EXPECT_EQ(argument.parsed_or_default_value(), test::Shape::Circle);
   EXPECT_EQ(argument.keys_with_value_type(), "-s <value>, --shape <value>");
@@ -4203,7 +4231,21 @@ TEST(Lector, SingularArgumentEnumerationNamedOptional) {
   EXPECT_EQ(argument.options(), "-s <value>, --shape <value>  Favorite shape.");
   EXPECT_TRUE(argument.execution().empty());
   argument.set_parsed_value(test::Shape::Square);
-  // TODO.
+  EXPECT_EQ(argument.label(), test::Label::Shape);
+  EXPECT_EQ(argument.keys(), test::keys_enumeration());
+  EXPECT_EQ(argument.description(), "Favorite shape.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(argument.default_value().has_value()
+              && argument.default_value().value() == test::Shape::Circle);
+  EXPECT_TRUE(argument.parsed_value().has_value()
+              && argument.parsed_value().value() == test::Shape::Square);
+  EXPECT_EQ(argument.parsed_or_default_value(), test::Shape::Square);
+  EXPECT_EQ(argument.keys_with_value_type(), "-s <value>, --shape <value>");
+  EXPECT_EQ(argument.usage(), "[--shape <value>]");
+  EXPECT_EQ(argument.options(), "-s <value>, --shape <value>  Favorite shape.");
+  EXPECT_EQ(argument.execution(), "--shape Square");
 }
 
 TEST(Lector, SingularArgumentEnumerationNamedRequired) {
@@ -4233,8 +4275,8 @@ TEST(Lector, SingularArgumentEnumerationPositionalOptional) {
   EXPECT_EQ(argument.importance(), lector::Importance::Optional);
   EXPECT_EQ(argument.form(), lector::Form::Positional);
   EXPECT_EQ(argument.arity(), lector::Arity::Singular);
-  const std::optional<test::Shape>& default_value{argument.default_value()};
-  EXPECT_TRUE(default_value.has_value() && default_value.value() == test::Shape::Circle);
+  EXPECT_TRUE(argument.default_value().has_value()
+              && argument.default_value().value() == test::Shape::Circle);
   EXPECT_EQ(argument.parsed_value(), std::nullopt);
   EXPECT_EQ(argument.parsed_or_default_value(), test::Shape::Circle);
   EXPECT_EQ(argument.keys_with_value_type(), "<value>");
@@ -4242,7 +4284,21 @@ TEST(Lector, SingularArgumentEnumerationPositionalOptional) {
   EXPECT_EQ(argument.options(), "<value>  Favorite shape.");
   EXPECT_TRUE(argument.execution().empty());
   argument.set_parsed_value(test::Shape::Square);
-  // TODO.
+  EXPECT_EQ(argument.label(), test::Label::Shape);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Favorite shape.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(argument.default_value().has_value()
+              && argument.default_value().value() == test::Shape::Circle);
+  EXPECT_TRUE(argument.parsed_value().has_value()
+              && argument.parsed_value().value() == test::Shape::Square);
+  EXPECT_EQ(argument.parsed_or_default_value(), test::Shape::Square);
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "[<value>]");
+  EXPECT_EQ(argument.options(), "<value>  Favorite shape.");
+  EXPECT_EQ(argument.execution(), "Square");
 }
 
 TEST(Lector, SingularArgumentEnumerationPositionalRequired) {
@@ -4289,9 +4345,8 @@ TEST(Lector, SingularArgumentFilesystemPathNamedOptional) {
   EXPECT_EQ(argument.importance(), lector::Importance::Optional);
   EXPECT_EQ(argument.form(), lector::Form::Named);
   EXPECT_EQ(argument.arity(), lector::Arity::Singular);
-  const std::optional<std::filesystem::path>& default_value{argument.default_value()};
-  EXPECT_TRUE(
-      default_value.has_value() && default_value.value() == std::filesystem::path("/some/path"));
+  EXPECT_TRUE(argument.default_value().has_value()
+              && argument.default_value().value() == std::filesystem::path("/some/path"));
   EXPECT_EQ(argument.parsed_value(), std::nullopt);
   EXPECT_EQ(argument.parsed_or_default_value(), std::filesystem::path("/some/path"));
   EXPECT_EQ(argument.keys_with_value_type(), "-o <path>, --output_directory <path>");
@@ -4299,7 +4354,21 @@ TEST(Lector, SingularArgumentFilesystemPathNamedOptional) {
   EXPECT_EQ(argument.options(), "-o <path>, --output_directory <path>  Output directory.");
   EXPECT_TRUE(argument.execution().empty());
   argument.set_parsed_value(std::filesystem::path{"/some/other/path"});
-  // TODO.
+  EXPECT_EQ(argument.label(), test::Label::OutputDirectory);
+  EXPECT_EQ(argument.keys(), test::keys_filesystem_path());
+  EXPECT_EQ(argument.description(), "Output directory.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(argument.default_value().has_value()
+              && argument.default_value().value() == std::filesystem::path("/some/path"));
+  EXPECT_TRUE(argument.parsed_value().has_value()
+              && argument.parsed_value().value() == std::filesystem::path("/some/other/path"));
+  EXPECT_EQ(argument.parsed_or_default_value(), std::filesystem::path("/some/other/path"));
+  EXPECT_EQ(argument.keys_with_value_type(), "-o <path>, --output_directory <path>");
+  EXPECT_EQ(argument.usage(), "[--output_directory <path>]");
+  EXPECT_EQ(argument.options(), "-o <path>, --output_directory <path>  Output directory.");
+  EXPECT_EQ(argument.execution(), "--output_directory /some/other/path");
 }
 
 TEST(Lector, SingularArgumentFilesystemPathNamedRequired) {
@@ -4329,9 +4398,8 @@ TEST(Lector, SingularArgumentFilesystemPathPositionalOptional) {
   EXPECT_EQ(argument.importance(), lector::Importance::Optional);
   EXPECT_EQ(argument.form(), lector::Form::Positional);
   EXPECT_EQ(argument.arity(), lector::Arity::Singular);
-  const std::optional<std::filesystem::path>& default_value{argument.default_value()};
-  EXPECT_TRUE(
-      default_value.has_value() && default_value.value() == std::filesystem::path("/some/path"));
+  EXPECT_TRUE(argument.default_value().has_value()
+              && argument.default_value().value() == std::filesystem::path("/some/path"));
   EXPECT_EQ(argument.parsed_value(), std::nullopt);
   EXPECT_EQ(argument.parsed_or_default_value(), std::filesystem::path("/some/path"));
   EXPECT_EQ(argument.keys_with_value_type(), "<path>");
@@ -4339,7 +4407,21 @@ TEST(Lector, SingularArgumentFilesystemPathPositionalOptional) {
   EXPECT_EQ(argument.options(), "<path>  Output directory.");
   EXPECT_TRUE(argument.execution().empty());
   argument.set_parsed_value(std::filesystem::path{"/some/other/path"});
-  // TODO.
+  EXPECT_EQ(argument.label(), test::Label::OutputDirectory);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Output directory.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(argument.default_value().has_value()
+              && argument.default_value().value() == std::filesystem::path("/some/path"));
+  EXPECT_TRUE(argument.parsed_value().has_value()
+              && argument.parsed_value().value() == std::filesystem::path("/some/other/path"));
+  EXPECT_EQ(argument.parsed_or_default_value(), std::filesystem::path("/some/other/path"));
+  EXPECT_EQ(argument.keys_with_value_type(), "<path>");
+  EXPECT_EQ(argument.usage(), "[<path>]");
+  EXPECT_EQ(argument.options(), "<path>  Output directory.");
+  EXPECT_EQ(argument.execution(), "/some/other/path");
 }
 
 TEST(Lector, SingularArgumentFilesystemPathPositionalRequired) {
@@ -4386,8 +4468,8 @@ TEST(Lector, SingularArgumentFloatingPointNumberNamedOptional) {
   EXPECT_EQ(argument.importance(), lector::Importance::Optional);
   EXPECT_EQ(argument.form(), lector::Form::Named);
   EXPECT_EQ(argument.arity(), lector::Arity::Singular);
-  const std::optional<double>& default_value{argument.default_value()};
-  EXPECT_TRUE(default_value.has_value() && default_value.value() == test::OneOverThirtyTwo);
+  EXPECT_TRUE(argument.default_value().has_value()
+              && argument.default_value().value() == test::OneOverThirtyTwo);
   EXPECT_EQ(argument.parsed_value(), std::nullopt);
   EXPECT_EQ(argument.parsed_or_default_value(), test::OneOverThirtyTwo);
   EXPECT_EQ(argument.keys_with_value_type(), "-t <value>, --tolerance <value>");
@@ -4395,7 +4477,21 @@ TEST(Lector, SingularArgumentFloatingPointNumberNamedOptional) {
   EXPECT_EQ(argument.options(), "-t <value>, --tolerance <value>  Tolerance value.");
   EXPECT_TRUE(argument.execution().empty());
   argument.set_parsed_value(test::OneOverSixtyFour);
-  // TODO.
+  EXPECT_EQ(argument.label(), test::Label::Tolerance);
+  EXPECT_EQ(argument.keys(), test::keys_floating_point_number());
+  EXPECT_EQ(argument.description(), "Tolerance value.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(argument.default_value().has_value()
+              && argument.default_value().value() == test::OneOverThirtyTwo);
+  EXPECT_TRUE(argument.parsed_value().has_value()
+              && argument.parsed_value().value() == test::OneOverSixtyFour);
+  EXPECT_EQ(argument.parsed_or_default_value(), test::OneOverSixtyFour);
+  EXPECT_EQ(argument.keys_with_value_type(), "-t <value>, --tolerance <value>");
+  EXPECT_EQ(argument.usage(), "[--tolerance <value>]");
+  EXPECT_EQ(argument.options(), "-t <value>, --tolerance <value>  Tolerance value.");
+  EXPECT_EQ(argument.execution(), "--tolerance 0.0156250000000000000");
 }
 
 TEST(Lector, SingularArgumentFloatingPointNumberNamedRequired) {
@@ -4425,8 +4521,8 @@ TEST(Lector, SingularArgumentFloatingPointNumberPositionalOptional) {
   EXPECT_EQ(argument.importance(), lector::Importance::Optional);
   EXPECT_EQ(argument.form(), lector::Form::Positional);
   EXPECT_EQ(argument.arity(), lector::Arity::Singular);
-  const std::optional<double>& default_value{argument.default_value()};
-  EXPECT_TRUE(default_value.has_value() && default_value.value() == test::OneOverThirtyTwo);
+  EXPECT_TRUE(argument.default_value().has_value()
+              && argument.default_value().value() == test::OneOverThirtyTwo);
   EXPECT_EQ(argument.parsed_value(), std::nullopt);
   EXPECT_EQ(argument.parsed_or_default_value(), test::OneOverThirtyTwo);
   EXPECT_EQ(argument.keys_with_value_type(), "<value>");
@@ -4434,7 +4530,21 @@ TEST(Lector, SingularArgumentFloatingPointNumberPositionalOptional) {
   EXPECT_EQ(argument.options(), "<value>  Tolerance value.");
   EXPECT_TRUE(argument.execution().empty());
   argument.set_parsed_value(test::OneOverSixtyFour);
-  // TODO.
+  EXPECT_EQ(argument.label(), test::Label::Tolerance);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Tolerance value.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(argument.default_value().has_value()
+              && argument.default_value().value() == test::OneOverThirtyTwo);
+  EXPECT_TRUE(argument.parsed_value().has_value()
+              && argument.parsed_value().value() == test::OneOverSixtyFour);
+  EXPECT_EQ(argument.parsed_or_default_value(), test::OneOverSixtyFour);
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "[<value>]");
+  EXPECT_EQ(argument.options(), "<value>  Tolerance value.");
+  EXPECT_EQ(argument.execution(), "0.0156250000000000000");
 }
 
 TEST(Lector, SingularArgumentFloatingPointNumberPositionalRequired) {
@@ -4481,8 +4591,8 @@ TEST(Lector, SingularArgumentIntegerNamedOptional) {
   EXPECT_EQ(argument.importance(), lector::Importance::Optional);
   EXPECT_EQ(argument.form(), lector::Form::Named);
   EXPECT_EQ(argument.arity(), lector::Arity::Singular);
-  const std::optional<std::int32_t>& default_value{argument.default_value()};
-  EXPECT_TRUE(default_value.has_value() && default_value.value() == test::OneHundred);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == test::OneHundred);
   EXPECT_EQ(argument.parsed_value(), std::nullopt);
   EXPECT_EQ(argument.parsed_or_default_value(), test::OneHundred);
   EXPECT_EQ(argument.keys_with_value_type(), "-i <number>, --iterations <number>");
@@ -4490,7 +4600,21 @@ TEST(Lector, SingularArgumentIntegerNamedOptional) {
   EXPECT_EQ(argument.options(), "-i <number>, --iterations <number>  Number of iterations.");
   EXPECT_TRUE(argument.execution().empty());
   argument.set_parsed_value(test::TwoHundred);
-  // TODO.
+  EXPECT_EQ(argument.label(), test::Label::Iterations);
+  EXPECT_EQ(argument.keys(), test::keys_integer());
+  EXPECT_EQ(argument.description(), "Number of iterations.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == test::OneHundred);
+  EXPECT_TRUE(
+      argument.parsed_value().has_value() && argument.parsed_value().value() == test::TwoHundred);
+  EXPECT_EQ(argument.parsed_or_default_value(), test::TwoHundred);
+  EXPECT_EQ(argument.keys_with_value_type(), "-i <number>, --iterations <number>");
+  EXPECT_EQ(argument.usage(), "[--iterations <number>]");
+  EXPECT_EQ(argument.options(), "-i <number>, --iterations <number>  Number of iterations.");
+  EXPECT_EQ(argument.execution(), "--iterations 200");
 }
 
 TEST(Lector, SingularArgumentIntegerNamedRequired) {
@@ -4520,8 +4644,8 @@ TEST(Lector, SingularArgumentIntegerPositionalOptional) {
   EXPECT_EQ(argument.importance(), lector::Importance::Optional);
   EXPECT_EQ(argument.form(), lector::Form::Positional);
   EXPECT_EQ(argument.arity(), lector::Arity::Singular);
-  const std::optional<std::int32_t>& default_value{argument.default_value()};
-  EXPECT_TRUE(default_value.has_value() && default_value.value() == test::OneHundred);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == test::OneHundred);
   EXPECT_EQ(argument.parsed_value(), std::nullopt);
   EXPECT_EQ(argument.parsed_or_default_value(), test::OneHundred);
   EXPECT_EQ(argument.keys_with_value_type(), "<number>");
@@ -4529,7 +4653,21 @@ TEST(Lector, SingularArgumentIntegerPositionalOptional) {
   EXPECT_EQ(argument.options(), "<number>  Number of iterations.");
   EXPECT_TRUE(argument.execution().empty());
   argument.set_parsed_value(test::TwoHundred);
-  // TODO.
+  EXPECT_EQ(argument.label(), test::Label::Iterations);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Number of iterations.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == test::OneHundred);
+  EXPECT_TRUE(
+      argument.parsed_value().has_value() && argument.parsed_value().value() == test::TwoHundred);
+  EXPECT_EQ(argument.parsed_or_default_value(), test::TwoHundred);
+  EXPECT_EQ(argument.keys_with_value_type(), "<number>");
+  EXPECT_EQ(argument.usage(), "[<number>]");
+  EXPECT_EQ(argument.options(), "<number>  Number of iterations.");
+  EXPECT_EQ(argument.execution(), "200");
 }
 
 TEST(Lector, SingularArgumentIntegerPositionalRequired) {
@@ -4717,8 +4855,8 @@ TEST(Lector, SingularArgumentStringNamedOptional) {
   EXPECT_EQ(argument.importance(), lector::Importance::Optional);
   EXPECT_EQ(argument.form(), lector::Form::Named);
   EXPECT_EQ(argument.arity(), lector::Arity::Singular);
-  const std::optional<std::string>& default_value{argument.default_value()};
-  EXPECT_TRUE(default_value.has_value() && default_value.value() == "My Report");
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == "My Report");
   EXPECT_EQ(argument.parsed_value(), std::nullopt);
   EXPECT_EQ(argument.parsed_or_default_value(), "My Report");
   EXPECT_EQ(argument.keys_with_value_type(), "-t <text>, --title <text>");
@@ -4726,7 +4864,21 @@ TEST(Lector, SingularArgumentStringNamedOptional) {
   EXPECT_EQ(argument.options(), "-t <text>, --title <text>  Report title.");
   EXPECT_TRUE(argument.execution().empty());
   argument.set_parsed_value("My Other Report");
-  // TODO.
+  EXPECT_EQ(argument.label(), test::Label::Title);
+  EXPECT_EQ(argument.keys(), test::keys_string());
+  EXPECT_EQ(argument.description(), "Report title.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == "My Report");
+  EXPECT_TRUE(
+      argument.parsed_value().has_value() && argument.parsed_value().value() == "My Other Report");
+  EXPECT_EQ(argument.parsed_or_default_value(), "My Other Report");
+  EXPECT_EQ(argument.keys_with_value_type(), "-t <text>, --title <text>");
+  EXPECT_EQ(argument.usage(), "[--title <text>]");
+  EXPECT_EQ(argument.options(), "-t <text>, --title <text>  Report title.");
+  EXPECT_EQ(argument.execution(), "--title My Other Report");
 }
 
 TEST(Lector, SingularArgumentStringNamedRequired) {
@@ -4756,8 +4908,8 @@ TEST(Lector, SingularArgumentStringPositionalOptional) {
   EXPECT_EQ(argument.importance(), lector::Importance::Optional);
   EXPECT_EQ(argument.form(), lector::Form::Positional);
   EXPECT_EQ(argument.arity(), lector::Arity::Singular);
-  const std::optional<std::string>& default_value{argument.default_value()};
-  EXPECT_TRUE(default_value.has_value() && default_value.value() == "My Report");
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == "My Report");
   EXPECT_EQ(argument.parsed_value(), std::nullopt);
   EXPECT_EQ(argument.parsed_or_default_value(), "My Report");
   EXPECT_EQ(argument.keys_with_value_type(), "<text>");
@@ -4765,7 +4917,21 @@ TEST(Lector, SingularArgumentStringPositionalOptional) {
   EXPECT_EQ(argument.options(), "<text>  Report title.");
   EXPECT_TRUE(argument.execution().empty());
   argument.set_parsed_value("My Other Report");
-  // TODO.
+  EXPECT_EQ(argument.label(), test::Label::Title);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Report title.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == "My Report");
+  EXPECT_TRUE(
+      argument.parsed_value().has_value() && argument.parsed_value().value() == "My Other Report");
+  EXPECT_EQ(argument.parsed_or_default_value(), "My Other Report");
+  EXPECT_EQ(argument.keys_with_value_type(), "<text>");
+  EXPECT_EQ(argument.usage(), "[<text>]");
+  EXPECT_EQ(argument.options(), "<text>  Report title.");
+  EXPECT_EQ(argument.execution(), "My Other Report");
 }
 
 TEST(Lector, SingularArgumentStringPositionalRequired) {
@@ -4812,8 +4978,8 @@ TEST(Lector, SingularArgumentWeirdKeysNamedOptional) {
   EXPECT_EQ(argument.importance(), lector::Importance::Optional);
   EXPECT_EQ(argument.form(), lector::Form::Named);
   EXPECT_EQ(argument.arity(), lector::Arity::Singular);
-  const std::optional<std::int32_t>& default_value{argument.default_value()};
-  EXPECT_TRUE(default_value.has_value() && default_value.value() == test::OneHundred);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == test::OneHundred);
   EXPECT_EQ(argument.parsed_value(), std::nullopt);
   EXPECT_EQ(argument.parsed_or_default_value(), test::OneHundred);
   EXPECT_EQ(argument.keys_with_value_type(), "=w=k <number>, ==weird=key <number>");
@@ -4821,7 +4987,21 @@ TEST(Lector, SingularArgumentWeirdKeysNamedOptional) {
   EXPECT_EQ(argument.options(), "=w=k <number>, ==weird=key <number>  Weird argument.");
   EXPECT_TRUE(argument.execution().empty());
   argument.set_parsed_value(test::TwoHundred);
-  // TODO.
+  EXPECT_EQ(argument.label(), test::Label::Weird);
+  EXPECT_EQ(argument.keys(), test::keys_weird());
+  EXPECT_EQ(argument.description(), "Weird argument.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == test::OneHundred);
+  EXPECT_TRUE(
+      argument.parsed_value().has_value() && argument.parsed_value().value() == test::TwoHundred);
+  EXPECT_EQ(argument.parsed_or_default_value(), test::TwoHundred);
+  EXPECT_EQ(argument.keys_with_value_type(), "=w=k <number>, ==weird=key <number>");
+  EXPECT_EQ(argument.usage(), "[==weird=key <number>]");
+  EXPECT_EQ(argument.options(), "=w=k <number>, ==weird=key <number>  Weird argument.");
+  EXPECT_EQ(argument.execution(), "==weird=key 200");
 }
 
 TEST(Lector, SingularArgumentWeirdKeysNamedRequired) {
@@ -4878,24 +5058,22 @@ TEST(Lector, TutorialSection1Basic) {
   EXPECT_EQ(arguments.configuration().description, "Description of my application.");
   EXPECT_EQ(arguments.configuration().notes, "Additional notes about my application.");
   EXPECT_EQ(arguments.usage(), expected_usage);
-  std::ostringstream expected_options;
-  expected_options
-      << "-o <path>, --output_directory <path>  Output directory. Required." << std::endl;
-  expected_options
-      << "-i <number>, --iterations <number>    Number of iterations. Optional. Default 100."
-      << std::endl;
-  expected_options
-      << "-h, --help                            Display this help information and exit. Optional.";
-  EXPECT_EQ(arguments.options(), expected_options.str());
-  std::ostringstream expected_help;
-  expected_help << "My Application" << std::endl << std::endl;
-  expected_help << "Usage:" << std::endl;
-  expected_help << expected_usage << std::endl << std::endl;
-  expected_help << "Description of my application." << std::endl << std::endl;
-  expected_help << "Options:" << std::endl;
-  expected_help << expected_options.str() << std::endl << std::endl;
-  expected_help << "Additional notes about my application.";
-  EXPECT_EQ(arguments.help(), expected_help.str());
+  const std::string expected_options{
+    "-o <path>, --output_directory <path>  Output directory. Required.\n"
+    "-i <number>, --iterations <number>    Number of iterations. Optional. Default 100.\n"
+    "-h, --help                            Display this help information and exit. Optional."
+  };
+  EXPECT_EQ(arguments.options(), expected_options);
+  const std::string expected_help{
+    "My Application\n\n"
+    "Usage:\n" +
+    expected_usage + "\n\n"
+    "Description of my application.\n\n"
+    "Options:\n" +
+    expected_options + "\n\n"
+    "Additional notes about my application."
+  };
+  EXPECT_EQ(arguments.help(), expected_help);
   EXPECT_EQ(arguments.execution(),
             "/path/to/executable --output_directory /path/to/directory --iterations 200");
 }
@@ -4936,24 +5114,22 @@ TEST(Lector, TutorialSection1Help) {
   EXPECT_EQ(arguments.configuration().description, "Description of my application.");
   EXPECT_EQ(arguments.configuration().notes, "Additional notes about my application.");
   EXPECT_EQ(arguments.usage(), expected_usage);
-  std::ostringstream expected_options;
-  expected_options
-      << "-o <path>, --output_directory <path>  Output directory. Required." << std::endl;
-  expected_options
-      << "-i <number>, --iterations <number>    Number of iterations. Optional. Default 100."
-      << std::endl;
-  expected_options
-      << "-h, --help                            Display this help information and exit. Optional.";
-  EXPECT_EQ(arguments.options(), expected_options.str());
-  std::ostringstream expected_help;
-  expected_help << "My Application" << std::endl << std::endl;
-  expected_help << "Usage:" << std::endl;
-  expected_help << expected_usage << std::endl << std::endl;
-  expected_help << "Description of my application." << std::endl << std::endl;
-  expected_help << "Options:" << std::endl;
-  expected_help << expected_options.str() << std::endl << std::endl;
-  expected_help << "Additional notes about my application.";
-  EXPECT_EQ(arguments.help(), expected_help.str());
+  const std::string expected_options{
+    "-o <path>, --output_directory <path>  Output directory. Required.\n"
+    "-i <number>, --iterations <number>    Number of iterations. Optional. Default 100.\n"
+    "-h, --help                            Display this help information and exit. Optional."
+  };
+  EXPECT_EQ(arguments.options(), expected_options);
+  const std::string expected_help{
+    "My Application\n\n"
+    "Usage:\n" +
+    expected_usage + "\n\n"
+    "Description of my application.\n\n"
+    "Options:\n" +
+    expected_options + "\n\n"
+    "Additional notes about my application."
+  };
+  EXPECT_EQ(arguments.help(), expected_help);
   EXPECT_EQ(arguments.execution(),
             "/path/to/executable --output_directory /path/to/directory --iterations 200 --help");
 }
@@ -4978,22 +5154,22 @@ TEST(Lector, TutorialSection3Subsection2) {
   EXPECT_EQ(arguments.configuration().description, "Description of my application.");
   EXPECT_EQ(arguments.configuration().notes, "Additional notes about my application.");
   EXPECT_EQ(arguments.usage(), expected_usage);
-  std::ostringstream expected_options;
-  expected_options
-      << "o <path>, =o <path>, __out_dir__ <path>               Output directory. Required."
-      << std::endl;
-  expected_options << "=i= <number>, _it_ <number>, ==iterations== <number>  "
-                   << "Number of iterations. Optional. Default 100.";
-  EXPECT_EQ(arguments.options(), expected_options.str());
-  std::ostringstream expected_help;
-  expected_help << "My Application" << std::endl << std::endl;
-  expected_help << "Usage:" << std::endl;
-  expected_help << expected_usage << std::endl << std::endl;
-  expected_help << "Description of my application." << std::endl << std::endl;
-  expected_help << "Options:" << std::endl;
-  expected_help << expected_options.str() << std::endl << std::endl;
-  expected_help << "Additional notes about my application.";
-  EXPECT_EQ(arguments.help(), expected_help.str());
+  const std::string expected_options{
+    "o <path>, =o <path>, __out_dir__ <path>               Output directory. Required.\n"
+    "=i= <number>, _it_ <number>, ==iterations== <number>  Number of iterations. Optional. Default "
+    "100."
+  };
+  EXPECT_EQ(arguments.options(), expected_options);
+  const std::string expected_help{
+    "My Application\n\n"
+    "Usage:\n" +
+    expected_usage + "\n\n"
+    "Description of my application.\n\n"
+    "Options:\n" +
+    expected_options + "\n\n"
+    "Additional notes about my application."
+  };
+  EXPECT_EQ(arguments.help(), expected_help);
   EXPECT_EQ(arguments.execution(),
             "/path/to/executable __out_dir__ /path/to/directory ==iterations== 200");
 }
