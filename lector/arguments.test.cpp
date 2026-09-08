@@ -3526,7 +3526,7 @@ TEST(Lector, ImportancePrintGeneral) {
 }
 
 TEST(Lector, RepeatableArgumentBooleanDefault) {
-  const lector::RepeatableArgument<test::Label::Help, bool> argument;
+  lector::RepeatableArgument<test::Label::Help, bool> argument;
   EXPECT_EQ(argument.label(), test::Label::Help);
   EXPECT_TRUE(argument.keys().empty());
   EXPECT_TRUE(argument.description().empty());
@@ -3540,6 +3540,7 @@ TEST(Lector, RepeatableArgumentBooleanDefault) {
   EXPECT_TRUE(argument.usage().empty());
   EXPECT_TRUE(argument.options().empty());
   EXPECT_TRUE(argument.execution().empty());
+  EXPECT_ANY_THROW(argument.set_parsed_value(true));
 }
 
 TEST(Lector, RepeatableArgumentBooleanNamed) {
@@ -3763,25 +3764,7 @@ TEST(Lector, RepeatableArgumentIntegerDefault) {
   EXPECT_EQ(argument.usage(), "<number>");
   EXPECT_EQ(argument.options(), "<number>");
   EXPECT_TRUE(argument.execution().empty());
-  argument.set_parsed_value(test::ThreeHundred);
-  argument.set_parsed_value(test::FourHundred);
-  EXPECT_EQ(argument.label(), test::Label::Iterations);
-  EXPECT_TRUE(argument.keys().empty());
-  EXPECT_TRUE(argument.description().empty());
-  EXPECT_EQ(argument.importance(), lector::Importance::Required);
-  EXPECT_EQ(argument.form(), lector::Form::Positional);
-  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
-  EXPECT_TRUE(argument.default_values().empty());
-  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
-  EXPECT_EQ(argument.parsed_values().at(0), test::ThreeHundred);
-  EXPECT_EQ(argument.parsed_values().at(1), test::FourHundred);
-  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
-  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::ThreeHundred);
-  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::FourHundred);
-  EXPECT_EQ(argument.keys_with_value_type(), "<number>");
-  EXPECT_EQ(argument.usage(), "<number>");
-  EXPECT_EQ(argument.options(), "<number>");
-  EXPECT_EQ(argument.execution(), "300 400");
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::ThreeHundred));
 }
 
 TEST(Lector, RepeatableArgumentIntegerNamedOptional) {
@@ -4161,7 +4144,7 @@ TEST(Lector, RepeatableArgumentMoveConstructor) {
 }
 
 TEST(Lector, SingularArgumentBooleanDefault) {
-  const lector::SingularArgument<test::Label::Help, bool> argument;
+  lector::SingularArgument<test::Label::Help, bool> argument;
   EXPECT_EQ(argument.label(), test::Label::Help);
   EXPECT_TRUE(argument.keys().empty());
   EXPECT_TRUE(argument.description().empty());
@@ -4175,6 +4158,7 @@ TEST(Lector, SingularArgumentBooleanDefault) {
   EXPECT_TRUE(argument.options().empty());
   EXPECT_TRUE(argument.execution().empty());
   EXPECT_ANY_THROW(static_cast<void>(argument.parsed_or_default_value()));
+  EXPECT_ANY_THROW(argument.set_parsed_value(true));
 }
 
 TEST(Lector, SingularArgumentBooleanNamedOptional) {
@@ -4322,7 +4306,7 @@ TEST(Lector, SingularArgumentCopyConstructor) {
 }
 
 TEST(Lector, SingularArgumentDataStructureDefault) {
-  const lector::SingularArgument<test::Label::Point, test::Point> argument;
+  lector::SingularArgument<test::Label::Point, test::Point> argument;
   EXPECT_EQ(argument.label(), test::Label::Point);
   EXPECT_TRUE(argument.keys().empty());
   EXPECT_TRUE(argument.description().empty());
@@ -4336,6 +4320,7 @@ TEST(Lector, SingularArgumentDataStructureDefault) {
   EXPECT_EQ(argument.options(), "<value>");
   EXPECT_TRUE(argument.execution().empty());
   EXPECT_ANY_THROW(static_cast<void>(argument.parsed_or_default_value()));
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::SecondPoint));
 }
 
 TEST(Lector, SingularArgumentDataStructureNamedOptional) {
@@ -4445,7 +4430,7 @@ TEST(Lector, SingularArgumentDataStructurePositionalRequired) {
 }
 
 TEST(Lector, SingularArgumentEnumerationDefault) {
-  const lector::SingularArgument<test::Label::Shape, test::Shape> argument;
+  lector::SingularArgument<test::Label::Shape, test::Shape> argument;
   EXPECT_EQ(argument.label(), test::Label::Shape);
   EXPECT_TRUE(argument.keys().empty());
   EXPECT_TRUE(argument.description().empty());
@@ -4459,6 +4444,7 @@ TEST(Lector, SingularArgumentEnumerationDefault) {
   EXPECT_EQ(argument.options(), "<value>");
   EXPECT_TRUE(argument.execution().empty());
   EXPECT_ANY_THROW(static_cast<void>(argument.parsed_or_default_value()));
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::Shape::Square));
 }
 
 TEST(Lector, SingularArgumentEnumerationNamedOptional) {
@@ -4568,7 +4554,7 @@ TEST(Lector, SingularArgumentEnumerationPositionalRequired) {
 }
 
 TEST(Lector, SingularArgumentFilesystemPathDefault) {
-  const lector::SingularArgument<test::Label::OutputDirectory, std::filesystem::path> argument;
+  lector::SingularArgument<test::Label::OutputDirectory, std::filesystem::path> argument;
   EXPECT_EQ(argument.label(), test::Label::OutputDirectory);
   EXPECT_TRUE(argument.keys().empty());
   EXPECT_TRUE(argument.description().empty());
@@ -4582,6 +4568,7 @@ TEST(Lector, SingularArgumentFilesystemPathDefault) {
   EXPECT_EQ(argument.options(), "<path>");
   EXPECT_TRUE(argument.execution().empty());
   EXPECT_ANY_THROW(static_cast<void>(argument.parsed_or_default_value()));
+  EXPECT_ANY_THROW(argument.set_parsed_value(std::filesystem::path("/some/other/path")));
 }
 
 TEST(Lector, SingularArgumentFilesystemPathNamedOptional) {
@@ -4691,7 +4678,7 @@ TEST(Lector, SingularArgumentFilesystemPathPositionalRequired) {
 }
 
 TEST(Lector, SingularArgumentFloatingPointNumberDefault) {
-  const lector::SingularArgument<test::Label::Tolerance, double> argument;
+  lector::SingularArgument<test::Label::Tolerance, double> argument;
   EXPECT_EQ(argument.label(), test::Label::Tolerance);
   EXPECT_TRUE(argument.keys().empty());
   EXPECT_TRUE(argument.description().empty());
@@ -4705,6 +4692,7 @@ TEST(Lector, SingularArgumentFloatingPointNumberDefault) {
   EXPECT_EQ(argument.options(), "<value>");
   EXPECT_TRUE(argument.execution().empty());
   EXPECT_ANY_THROW(static_cast<void>(argument.parsed_or_default_value()));
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::OneOverSixtyFour));
 }
 
 TEST(Lector, SingularArgumentFloatingPointNumberNamedOptional) {
@@ -4814,7 +4802,7 @@ TEST(Lector, SingularArgumentFloatingPointNumberPositionalRequired) {
 }
 
 TEST(Lector, SingularArgumentIntegerDefault) {
-  const lector::SingularArgument<test::Label::Iterations, std::int32_t> argument;
+  lector::SingularArgument<test::Label::Iterations, std::int32_t> argument;
   EXPECT_EQ(argument.label(), test::Label::Iterations);
   EXPECT_TRUE(argument.keys().empty());
   EXPECT_TRUE(argument.description().empty());
@@ -4828,6 +4816,7 @@ TEST(Lector, SingularArgumentIntegerDefault) {
   EXPECT_EQ(argument.options(), "<number>");
   EXPECT_TRUE(argument.execution().empty());
   EXPECT_ANY_THROW(static_cast<void>(argument.parsed_or_default_value()));
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::TwoHundred));
 }
 
 TEST(Lector, SingularArgumentIntegerNamedOptional) {
@@ -5096,7 +5085,7 @@ TEST(Lector, SingularArgumentMoveConstructor) {
 }
 
 TEST(Lector, SingularArgumentStringDefault) {
-  const lector::SingularArgument<test::Label::Title, std::string> argument;
+  lector::SingularArgument<test::Label::Title, std::string> argument;
   EXPECT_EQ(argument.label(), test::Label::Title);
   EXPECT_TRUE(argument.keys().empty());
   EXPECT_TRUE(argument.description().empty());
@@ -5110,6 +5099,7 @@ TEST(Lector, SingularArgumentStringDefault) {
   EXPECT_EQ(argument.options(), "<text>");
   EXPECT_TRUE(argument.execution().empty());
   EXPECT_ANY_THROW(static_cast<void>(argument.parsed_or_default_value()));
+  EXPECT_ANY_THROW(argument.set_parsed_value("My Other Title"));
 }
 
 TEST(Lector, SingularArgumentStringNamedOptional) {
@@ -5219,7 +5209,7 @@ TEST(Lector, SingularArgumentStringPositionalRequired) {
 }
 
 TEST(Lector, SingularArgumentWeirdKeysDefault) {
-  const lector::SingularArgument<test::Label::Weird, std::int32_t> argument;
+  lector::SingularArgument<test::Label::Weird, std::int32_t> argument;
   EXPECT_EQ(argument.label(), test::Label::Weird);
   EXPECT_TRUE(argument.keys().empty());
   EXPECT_TRUE(argument.description().empty());
@@ -5233,6 +5223,7 @@ TEST(Lector, SingularArgumentWeirdKeysDefault) {
   EXPECT_EQ(argument.options(), "<number>");
   EXPECT_TRUE(argument.execution().empty());
   EXPECT_ANY_THROW(static_cast<void>(argument.parsed_or_default_value()));
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::TwoHundred));
 }
 
 TEST(Lector, SingularArgumentWeirdKeysNamedOptional) {

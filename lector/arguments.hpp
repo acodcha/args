@@ -331,11 +331,14 @@ public:
 
   /// @brief Sets the parsed value of this singular command line argument.
   /// @param[in] value The parsed value to set.
+  /// @throws std::logic_error if this singular command line argument is default-constructed or if a
+  /// parsed value has already been set for this singular command line argument.
   /// @throws std::invalid_argument if this singular command line argument is boolean and the parsed
   /// value is false.
-  /// @throws std::logic_error if a parsed value has already been set for this singular command line
-  /// argument.
   void set_parsed_value(const Type& value) {
+    if (description_.empty()) {
+      throw std::logic_error("Default-constructed arguments cannot parse values.");
+    }
     if constexpr (std::is_same_v<Type, bool>) {
       if (!value) {
         throw std::invalid_argument("Boolean arguments can only be parsed as true.");
@@ -726,9 +729,13 @@ public:
 
   /// @brief Inserts an additional parsed value into this repeatable command line argument.
   /// @param[in] value The parsed value to insert.
-  /// @throws std::invalid_argument if this singular command line argument is boolean and the parsed
-  /// value is false.
+  /// @throws std::logic_error if this repeatable command line argument is default-constructed.
+  /// @throws std::invalid_argument if this repeatable command line argument is boolean and the
+  /// parsed value is false.
   void set_parsed_value(const Type& value) {
+    if (description_.empty()) {
+      throw std::logic_error("Default-constructed arguments cannot parse values.");
+    }
     if constexpr (std::is_same_v<Type, bool>) {
       if (!value) {
         throw std::invalid_argument("Boolean arguments can only be parsed as true.");
