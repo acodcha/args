@@ -543,10 +543,17 @@ private:
   /// argument.
   [[nodiscard]] std::string execution_non_boolean() const {
     if (parsed_value_.has_value()) {
-      if (keys_.empty()) {
-        return lector::print<Type>(parsed_value_.value());
+      std::string parsed_value_string;
+      if constexpr (std::is_same_v<Type, std::string> || std::is_same_v<Type, std::string_view>
+                    || std::is_same_v<Type, std::filesystem::path>) {
+        parsed_value_string = "\"" + lector::print<Type>(parsed_value_.value()) + "\"";
+      } else {
+        parsed_value_string = lector::print<Type>(parsed_value_.value());
       }
-      return longest_key() + " " + lector::print<Type>(parsed_value_.value());
+      if (keys_.empty()) {
+        return parsed_value_string;
+      }
+      return longest_key() + " " + parsed_value_string;
     }
     return std::string{};
   }
@@ -940,7 +947,14 @@ private:
         if (!result.empty()) {
           result.push_back(' ');
         }
-        result.append(lector::print<Type>(parsed_value));
+        std::string parsed_value_string;
+        if constexpr (std::is_same_v<Type, std::string> || std::is_same_v<Type, std::string_view>
+                      || std::is_same_v<Type, std::filesystem::path>) {
+          parsed_value_string = "\"" + lector::print<Type>(parsed_value) + "\"";
+        } else {
+          parsed_value_string = lector::print<Type>(parsed_value);
+        }
+        result.append(parsed_value_string);
       }
       return result;
     }
@@ -951,7 +965,14 @@ private:
       }
       result.append(longest_key());
       result.push_back(' ');
-      result.append(lector::print<Type>(parsed_value));
+      std::string parsed_value_string;
+      if constexpr (std::is_same_v<Type, std::string> || std::is_same_v<Type, std::string_view>
+                    || std::is_same_v<Type, std::filesystem::path>) {
+        parsed_value_string = "\"" + lector::print<Type>(parsed_value) + "\"";
+      } else {
+        parsed_value_string = lector::print<Type>(parsed_value);
+      }
+      result.append(parsed_value_string);
     }
     return result;
   }
