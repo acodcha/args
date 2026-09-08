@@ -344,6 +344,62 @@ void repeatable_argument_invalid_no_keys() {
     std::vector<std::string>{}, "Number of iterations."};
 }
 
+/// @brief Helper function that creates a repeatable named optional string command line argument.
+/// @return The repeatable named optional string command line argument.
+lector::RepeatableArgument<test::Label::Title, std::string>
+repeatable_argument_string_named_optional() {
+  return lector::RepeatableArgument<test::Label::Title, std::string>{
+    test::keys_string(), "Report title.",
+    std::vector<std::string>{"My First Report", "My Second Report"}
+  };
+}
+
+/// @brief Helper function that creates a repeatable named required string command line argument.
+/// @return The repeatable named required string command line argument.
+lector::RepeatableArgument<test::Label::Title, std::string>
+repeatable_argument_string_named_required() {
+  return lector::RepeatableArgument<test::Label::Title, std::string>{
+    test::keys_string(), "Report title."};
+}
+
+/// @brief Helper function that creates a repeatable positional optional string command line
+/// argument.
+/// @return The repeatable positional optional string command line argument.
+lector::RepeatableArgument<test::Label::Title, std::string>
+repeatable_argument_string_positional_optional() {
+  return lector::RepeatableArgument<test::Label::Title, std::string>{
+    "Report title.", std::vector<std::string>{"My First Report", "My Second Report"}
+  };
+}
+
+/// @brief Helper function that creates a repeatable positional required string command line
+/// argument.
+/// @return The repeatable positional required string command line argument.
+lector::RepeatableArgument<test::Label::Title, std::string>
+repeatable_argument_string_positional_required() {
+  return lector::RepeatableArgument<test::Label::Title, std::string>{"Report title."};
+}
+
+/// @brief Helper function that creates a repeatable named optional integer command line argument
+/// with weird keys.
+/// @return The repeatable named optional integer command line argument with weird keys.
+lector::RepeatableArgument<test::Label::Weird, std::int32_t>
+repeatable_argument_weird_keys_optional() {
+  return lector::RepeatableArgument<test::Label::Weird, std::int32_t>{
+    test::keys_weird(), "Weird argument.",
+    std::vector<std::int32_t>{test::OneHundred, test::TwoHundred}
+  };
+}
+
+/// @brief Helper function that creates a repeatable named required integer command line argument
+/// with weird keys.
+/// @return The repeatable named required integer command line argument with weird keys.
+lector::RepeatableArgument<test::Label::Weird, std::int32_t>
+repeatable_argument_weird_keys_required() {
+  return lector::RepeatableArgument<test::Label::Weird, std::int32_t>{
+    test::keys_weird(), "Weird argument."};
+}
+
 /// @brief Helper function that creates a singular named optional boolean command line argument.
 /// @return The singular named optional boolean command line argument.
 lector::SingularArgument<test::Label::Help, bool> singular_argument_boolean() {
@@ -647,8 +703,7 @@ singular_argument_string_positional_required() {
 /// @brief Helper function that creates a singular named optional integer command line argument with
 /// weird keys.
 /// @return The singular named optional integer command line argument with weird keys.
-lector::SingularArgument<test::Label::Weird, std::int32_t>
-singular_argument_weird_keys_named_optional() {
+lector::SingularArgument<test::Label::Weird, std::int32_t> singular_argument_weird_keys_optional() {
   return lector::SingularArgument<test::Label::Weird, std::int32_t>{
     test::keys_weird(), "Weird argument.", test::OneHundred};
 }
@@ -656,8 +711,7 @@ singular_argument_weird_keys_named_optional() {
 /// @brief Helper function that creates a singular named required integer command line argument with
 /// weird keys.
 /// @return The singular named required integer command line argument with weird keys.
-lector::SingularArgument<test::Label::Weird, std::int32_t>
-singular_argument_weird_keys_named_required() {
+lector::SingularArgument<test::Label::Weird, std::int32_t> singular_argument_weird_keys_required() {
   return lector::SingularArgument<test::Label::Weird, std::int32_t>{
     test::keys_weird(), "Weird argument."};
 }
@@ -1805,7 +1859,7 @@ TEST(Lector, ArgumentsValidIndividualOutputDirectoryRequiredNoConfiguration) {
   expected_help << "Options:" << std::endl;
   expected_help << expected_options;
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(arguments.execution(), "/path/to/executable --output_directory /path/to/output");
+  EXPECT_EQ(arguments.execution(), "/path/to/executable --output_directory \"/path/to/output\"");
 }
 
 TEST(Lector, ArgumentsValidIndividualOutputDirectoryRequiredWithConfiguration) {
@@ -1832,7 +1886,7 @@ TEST(Lector, ArgumentsValidIndividualOutputDirectoryRequiredWithConfiguration) {
   expected_help << expected_options << std::endl << std::endl;
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(arguments.execution(), "/path/to/executable --output_directory /path/to/output");
+  EXPECT_EQ(arguments.execution(), "/path/to/executable --output_directory \"/path/to/output\"");
 }
 
 TEST(Lector, ArgumentsValidIndividualPointOptionalNoConfiguration) {
@@ -2081,7 +2135,7 @@ TEST(Lector, ArgumentsValidIndividualTitleRequiredNoConfiguration) {
   expected_help << "Options:" << std::endl;
   expected_help << expected_options;
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(arguments.execution(), "/path/to/executable --title Some Other Report");
+  EXPECT_EQ(arguments.execution(), "/path/to/executable --title \"Some Other Report\"");
 }
 
 TEST(Lector, ArgumentsValidIndividualTitleRequiredWithConfiguration) {
@@ -2108,7 +2162,7 @@ TEST(Lector, ArgumentsValidIndividualTitleRequiredWithConfiguration) {
   expected_help << expected_options << std::endl << std::endl;
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(arguments.execution(), "/path/to/executable --title Some Other Report");
+  EXPECT_EQ(arguments.execution(), "/path/to/executable --title \"Some Other Report\"");
 }
 
 TEST(Lector, ArgumentsValidIndividualToleranceOptionalNoConfiguration) {
@@ -2245,8 +2299,8 @@ TEST(Lector, ArgumentsValidManyInlineLongKeysNoConfiguration) {
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
-            "200 --help");
+            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
+            "--iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyInlineLongKeysWithConfiguration) {
@@ -2292,8 +2346,8 @@ TEST(Lector, ArgumentsValidManyInlineLongKeysWithConfiguration) {
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
-            "200 --help");
+            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
+            "--iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyInlineShortKeysNoConfiguration) {
@@ -2335,8 +2389,8 @@ TEST(Lector, ArgumentsValidManyInlineShortKeysNoConfiguration) {
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
-            "200 --help");
+            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
+            "--iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyInlineShortKeysWithConfiguration) {
@@ -2381,8 +2435,8 @@ TEST(Lector, ArgumentsValidManyInlineShortKeysWithConfiguration) {
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
-            "200 --help");
+            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
+            "--iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyMixedLongKeysNoConfiguration) {
@@ -2425,8 +2479,8 @@ TEST(Lector, ArgumentsValidManyMixedLongKeysNoConfiguration) {
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
-            "200 --help");
+            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
+            "--iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyMixedLongKeysWithConfiguration) {
@@ -2472,8 +2526,8 @@ TEST(Lector, ArgumentsValidManyMixedLongKeysWithConfiguration) {
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
-            "200 --help");
+            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
+            "--iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyMixedShortKeysNoConfiguration) {
@@ -2515,8 +2569,8 @@ TEST(Lector, ArgumentsValidManyMixedShortKeysNoConfiguration) {
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
-            "200 --help");
+            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
+            "--iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyMixedShortKeysWithConfiguration) {
@@ -2561,8 +2615,8 @@ TEST(Lector, ArgumentsValidManyMixedShortKeysWithConfiguration) {
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
-            "200 --help");
+            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
+            "--iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyPositionalNoConfiguration) {
@@ -2602,8 +2656,8 @@ TEST(Lector, ArgumentsValidManyPositionalNoConfiguration) {
   expected_help << "Options:" << std::endl;
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(
-      arguments.execution(), "/path/to/executable Circle /path/to/output --iterations 200 --help");
+  EXPECT_EQ(arguments.execution(),
+            "/path/to/executable Circle \"/path/to/output\" --iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyPositionalWithConfiguration) {
@@ -2646,8 +2700,8 @@ TEST(Lector, ArgumentsValidManyPositionalWithConfiguration) {
   expected_help << expected_options.str() << std::endl << std::endl;
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(
-      arguments.execution(), "/path/to/executable Circle /path/to/output --iterations 200 --help");
+  EXPECT_EQ(arguments.execution(),
+            "/path/to/executable Circle \"/path/to/output\" --iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyWhitespaceLongKeysNoConfiguration) {
@@ -2690,8 +2744,8 @@ TEST(Lector, ArgumentsValidManyWhitespaceLongKeysNoConfiguration) {
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
-            "200 --help");
+            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
+            "--iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyWhitespaceLongKeysWithConfiguration) {
@@ -2737,8 +2791,8 @@ TEST(Lector, ArgumentsValidManyWhitespaceLongKeysWithConfiguration) {
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
-            "200 --help");
+            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
+            "--iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyWhitespaceShortKeysNoConfiguration) {
@@ -2780,8 +2834,8 @@ TEST(Lector, ArgumentsValidManyWhitespaceShortKeysNoConfiguration) {
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
-            "200 --help");
+            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
+            "--iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyWhitespaceShortKeysWithConfiguration) {
@@ -2826,8 +2880,8 @@ TEST(Lector, ArgumentsValidManyWhitespaceShortKeysWithConfiguration) {
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
-            "200 --help");
+            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
+            "--iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidSeveralIterationsIterationsAgainNoConfiguration) {
@@ -2983,7 +3037,8 @@ TEST(Lector, ArgumentsValidSeveralOutputDirectoryHelpNoConfiguration) {
   expected_help << "Options:" << std::endl;
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(arguments.execution(), "/path/to/executable --output_directory /path/to/output --help");
+  EXPECT_EQ(
+      arguments.execution(), "/path/to/executable --output_directory \"/path/to/output\" --help");
 }
 
 TEST(Lector, ArgumentsValidSeveralOutputDirectoryHelpWithConfiguration) {
@@ -3017,7 +3072,8 @@ TEST(Lector, ArgumentsValidSeveralOutputDirectoryHelpWithConfiguration) {
   expected_help << expected_options.str() << std::endl << std::endl;
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(arguments.execution(), "/path/to/executable --output_directory /path/to/output --help");
+  EXPECT_EQ(
+      arguments.execution(), "/path/to/executable --output_directory \"/path/to/output\" --help");
 }
 
 TEST(Lector, ArgumentsValidSeveralOutputDirectoryIterationsHelpNoConfiguration) {
@@ -3055,7 +3111,7 @@ TEST(Lector, ArgumentsValidSeveralOutputDirectoryIterationsHelpNoConfiguration) 
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --output_directory /path/to/output --iterations 200 --help");
+            "/path/to/executable --output_directory \"/path/to/output\" --iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidSeveralOutputDirectoryIterationsHelpWithConfiguration) {
@@ -3096,11 +3152,11 @@ TEST(Lector, ArgumentsValidSeveralOutputDirectoryIterationsHelpWithConfiguration
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --output_directory /path/to/output --iterations 200 --help");
+            "/path/to/executable --output_directory \"/path/to/output\" --iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsWeirdLongInlineNoConfiguration) {
-  lector::Arguments arguments{test::singular_argument_weird_keys_named_optional()};
+  lector::Arguments arguments{test::singular_argument_weird_keys_optional()};
   const test::Command command{
     {"/path/to/executable", "==weird=key=200"}
   };
@@ -3112,8 +3168,7 @@ TEST(Lector, ArgumentsWeirdLongInlineNoConfiguration) {
 }
 
 TEST(Lector, ArgumentsWeirdLongInlineWithConfiguration) {
-  lector::Arguments arguments{
-    test::configuration(), test::singular_argument_weird_keys_named_optional()};
+  lector::Arguments arguments{test::configuration(), test::singular_argument_weird_keys_optional()};
   const test::Command command{
     {"/path/to/executable", "==weird=key=200"}
   };
@@ -3125,7 +3180,7 @@ TEST(Lector, ArgumentsWeirdLongInlineWithConfiguration) {
 }
 
 TEST(Lector, ArgumentsWeirdLongWhitespaceNoConfiguration) {
-  lector::Arguments arguments{test::singular_argument_weird_keys_named_optional()};
+  lector::Arguments arguments{test::singular_argument_weird_keys_optional()};
   const test::Command command{
     {"/path/to/executable", "==weird=key", "200"}
   };
@@ -3137,8 +3192,7 @@ TEST(Lector, ArgumentsWeirdLongWhitespaceNoConfiguration) {
 }
 
 TEST(Lector, ArgumentsWeirdLongWhitespaceWithConfiguration) {
-  lector::Arguments arguments{
-    test::configuration(), test::singular_argument_weird_keys_named_optional()};
+  lector::Arguments arguments{test::configuration(), test::singular_argument_weird_keys_optional()};
   const test::Command command{
     {"/path/to/executable", "==weird=key", "200"}
   };
@@ -3150,7 +3204,7 @@ TEST(Lector, ArgumentsWeirdLongWhitespaceWithConfiguration) {
 }
 
 TEST(Lector, ArgumentsWeirdShortInlineNoConfiguration) {
-  lector::Arguments arguments{test::singular_argument_weird_keys_named_required()};
+  lector::Arguments arguments{test::singular_argument_weird_keys_required()};
   const test::Command command{
     {"/path/to/executable", "=w=k=200"}
   };
@@ -3162,8 +3216,7 @@ TEST(Lector, ArgumentsWeirdShortInlineNoConfiguration) {
 }
 
 TEST(Lector, ArgumentsWeirdShortInlineWithConfiguration) {
-  lector::Arguments arguments{
-    test::configuration(), test::singular_argument_weird_keys_named_required()};
+  lector::Arguments arguments{test::configuration(), test::singular_argument_weird_keys_required()};
   const test::Command command{
     {"/path/to/executable", "=w=k=200"}
   };
@@ -3175,7 +3228,7 @@ TEST(Lector, ArgumentsWeirdShortInlineWithConfiguration) {
 }
 
 TEST(Lector, ArgumentsWeirdShortWhitespaceNoConfiguration) {
-  lector::Arguments arguments{test::singular_argument_weird_keys_named_required()};
+  lector::Arguments arguments{test::singular_argument_weird_keys_required()};
   const test::Command command{
     {"/path/to/executable", "=w=k", "200"}
   };
@@ -3187,8 +3240,7 @@ TEST(Lector, ArgumentsWeirdShortWhitespaceNoConfiguration) {
 }
 
 TEST(Lector, ArgumentsWeirdShortWhitespaceWithConfiguration) {
-  lector::Arguments arguments{
-    test::configuration(), test::singular_argument_weird_keys_named_required()};
+  lector::Arguments arguments{test::configuration(), test::singular_argument_weird_keys_required()};
   const test::Command command{
     {"/path/to/executable", "=w=k", "200"}
   };
@@ -3764,7 +3816,7 @@ TEST(Lector, RepeatableArgumentIntegerDefault) {
   EXPECT_EQ(argument.usage(), "<number>");
   EXPECT_EQ(argument.options(), "<number>");
   EXPECT_TRUE(argument.execution().empty());
-  EXPECT_ANY_THROW(argument.set_parsed_value(test::ThreeHundred));
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::OneHundred));
 }
 
 TEST(Lector, RepeatableArgumentIntegerNamedOptional) {
@@ -4141,6 +4193,282 @@ TEST(Lector, RepeatableArgumentMoveConstructor) {
   EXPECT_EQ(second.usage(), "[--iterations <number>]");
   EXPECT_EQ(second.options(), "-i <number>, --iterations <number>  Number of iterations.");
   EXPECT_EQ(second.execution(), "--iterations 300 --iterations 400");
+}
+
+TEST(Lector, RepeatableArgumentStringDefault) {
+  lector::RepeatableArgument<test::Label::Title, std::string> argument;
+  EXPECT_EQ(argument.label(), test::Label::Title);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_TRUE(argument.description().empty());
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "<text>");
+  EXPECT_EQ(argument.usage(), "<text>");
+  EXPECT_EQ(argument.options(), "<text>");
+  EXPECT_TRUE(argument.execution().empty());
+  EXPECT_ANY_THROW(argument.set_parsed_value("My Report"));
+}
+
+TEST(Lector, RepeatableArgumentStringNamedOptional) {
+  lector::RepeatableArgument<test::Label::Title, std::string> argument{
+    test::repeatable_argument_string_named_optional()};
+  EXPECT_EQ(argument.label(), test::Label::Title);
+  EXPECT_EQ(argument.keys(), test::keys_string());
+  EXPECT_EQ(argument.description(), "Report title.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), "My First Report");
+  EXPECT_EQ(argument.default_values().at(1), "My Second Report");
+  EXPECT_TRUE(argument.parsed_values().empty());
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), "My First Report");
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), "My Second Report");
+  EXPECT_EQ(argument.keys_with_value_type(), "-t <text>, --title <text>");
+  EXPECT_EQ(argument.usage(), "[--title <text>]");
+  EXPECT_EQ(argument.options(), "-t <text>, --title <text>  Report title.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value("My Third Report");
+  argument.set_parsed_value("My Fourth Report");
+  EXPECT_EQ(argument.label(), test::Label::Title);
+  EXPECT_EQ(argument.keys(), test::keys_string());
+  EXPECT_EQ(argument.description(), "Report title.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), "My First Report");
+  EXPECT_EQ(argument.default_values().at(1), "My Second Report");
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), "My Third Report");
+  EXPECT_EQ(argument.parsed_values().at(1), "My Fourth Report");
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), "My Third Report");
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), "My Fourth Report");
+  EXPECT_EQ(argument.keys_with_value_type(), "-t <text>, --title <text>");
+  EXPECT_EQ(argument.usage(), "[--title <text>]");
+  EXPECT_EQ(argument.options(), "-t <text>, --title <text>  Report title.");
+  EXPECT_EQ(argument.execution(), "--title \"My Third Report\" --title \"My Fourth Report\"");
+}
+
+TEST(Lector, RepeatableArgumentStringNamedRequired) {
+  lector::RepeatableArgument<test::Label::Title, std::string> argument{
+    test::repeatable_argument_string_named_required()};
+  EXPECT_EQ(argument.label(), test::Label::Title);
+  EXPECT_EQ(argument.keys(), test::keys_string());
+  EXPECT_EQ(argument.description(), "Report title.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "-t <text>, --title <text>");
+  EXPECT_EQ(argument.usage(), "--title <text>");
+  EXPECT_EQ(argument.options(), "-t <text>, --title <text>  Report title.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value("My Third Report");
+  argument.set_parsed_value("My Fourth Report");
+  EXPECT_EQ(argument.label(), test::Label::Title);
+  EXPECT_EQ(argument.keys(), test::keys_string());
+  EXPECT_EQ(argument.description(), "Report title.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), "My Third Report");
+  EXPECT_EQ(argument.parsed_values().at(1), "My Fourth Report");
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), "My Third Report");
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), "My Fourth Report");
+  EXPECT_EQ(argument.keys_with_value_type(), "-t <text>, --title <text>");
+  EXPECT_EQ(argument.usage(), "--title <text>");
+  EXPECT_EQ(argument.options(), "-t <text>, --title <text>  Report title.");
+  EXPECT_EQ(argument.execution(), "--title \"My Third Report\" --title \"My Fourth Report\"");
+}
+
+TEST(Lector, RepeatableArgumentStringPositionalOptional) {
+  lector::RepeatableArgument<test::Label::Title, std::string> argument{
+    test::repeatable_argument_string_positional_optional()};
+  EXPECT_EQ(argument.label(), test::Label::Title);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Report title.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), "My First Report");
+  EXPECT_EQ(argument.default_values().at(1), "My Second Report");
+  EXPECT_TRUE(argument.parsed_values().empty());
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), "My First Report");
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), "My Second Report");
+  EXPECT_EQ(argument.keys_with_value_type(), "<text>");
+  EXPECT_EQ(argument.usage(), "[<text>]");
+  EXPECT_EQ(argument.options(), "<text>  Report title.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value("My Third Report");
+  argument.set_parsed_value("My Fourth Report");
+  EXPECT_EQ(argument.label(), test::Label::Title);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Report title.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), "My First Report");
+  EXPECT_EQ(argument.default_values().at(1), "My Second Report");
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), "My Third Report");
+  EXPECT_EQ(argument.parsed_values().at(1), "My Fourth Report");
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), "My Third Report");
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), "My Fourth Report");
+  EXPECT_EQ(argument.keys_with_value_type(), "<text>");
+  EXPECT_EQ(argument.usage(), "[<text>]");
+  EXPECT_EQ(argument.options(), "<text>  Report title.");
+  EXPECT_EQ(argument.execution(), "\"My Third Report\" \"My Fourth Report\"");
+}
+
+TEST(Lector, RepeatableArgumentStringPositionalRequired) {
+  lector::RepeatableArgument<test::Label::Title, std::string> argument{
+    test::repeatable_argument_string_positional_required()};
+  EXPECT_EQ(argument.label(), test::Label::Title);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Report title.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "<text>");
+  EXPECT_EQ(argument.usage(), "<text>");
+  EXPECT_EQ(argument.options(), "<text>  Report title.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value("My Third Report");
+  argument.set_parsed_value("My Fourth Report");
+  EXPECT_EQ(argument.label(), test::Label::Title);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Report title.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), "My Third Report");
+  EXPECT_EQ(argument.parsed_values().at(1), "My Fourth Report");
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), "My Third Report");
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), "My Fourth Report");
+  EXPECT_EQ(argument.keys_with_value_type(), "<text>");
+  EXPECT_EQ(argument.usage(), "<text>");
+  EXPECT_EQ(argument.options(), "<text>  Report title.");
+  EXPECT_EQ(argument.execution(), "\"My Third Report\" \"My Fourth Report\"");
+}
+
+TEST(Lector, RepeatableArgumentWeirdKeysDefault) {
+  lector::RepeatableArgument<test::Label::Weird, std::int32_t> argument;
+  EXPECT_EQ(argument.label(), test::Label::Weird);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_TRUE(argument.description().empty());
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "<number>");
+  EXPECT_EQ(argument.usage(), "<number>");
+  EXPECT_EQ(argument.options(), "<number>");
+  EXPECT_TRUE(argument.execution().empty());
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::OneHundred));
+}
+
+TEST(Lector, RepeatableArgumentWeirdKeysOptional) {
+  lector::RepeatableArgument<test::Label::Weird, std::int32_t> argument{
+    test::repeatable_argument_weird_keys_optional()};
+  EXPECT_EQ(argument.label(), test::Label::Weird);
+  EXPECT_EQ(argument.keys(), test::keys_weird());
+  EXPECT_EQ(argument.description(), "Weird argument.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::OneHundred);
+  EXPECT_EQ(argument.default_values().at(1), test::TwoHundred);
+  EXPECT_TRUE(argument.parsed_values().empty());
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::OneHundred);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::TwoHundred);
+  EXPECT_EQ(argument.keys_with_value_type(), "=w=k <number>, ==weird=key <number>");
+  EXPECT_EQ(argument.usage(), "[==weird=key <number>]");
+  EXPECT_EQ(argument.options(), "=w=k <number>, ==weird=key <number>  Weird argument.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::ThreeHundred);
+  argument.set_parsed_value(test::FourHundred);
+  EXPECT_EQ(argument.label(), test::Label::Weird);
+  EXPECT_EQ(argument.keys(), test::keys_weird());
+  EXPECT_EQ(argument.description(), "Weird argument.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::OneHundred);
+  EXPECT_EQ(argument.default_values().at(1), test::TwoHundred);
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::ThreeHundred);
+  EXPECT_EQ(argument.parsed_values().at(1), test::FourHundred);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::ThreeHundred);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::FourHundred);
+  EXPECT_EQ(argument.keys_with_value_type(), "=w=k <number>, ==weird=key <number>");
+  EXPECT_EQ(argument.usage(), "[==weird=key <number>]");
+  EXPECT_EQ(argument.options(), "=w=k <number>, ==weird=key <number>  Weird argument.");
+  EXPECT_EQ(argument.execution(), "==weird=key 300 ==weird=key 400");
+}
+
+TEST(Lector, RepeatableArgumentWeirdKeysRequired) {
+  lector::RepeatableArgument<test::Label::Weird, std::int32_t> argument{
+    test::repeatable_argument_weird_keys_required()};
+  EXPECT_EQ(argument.label(), test::Label::Weird);
+  EXPECT_EQ(argument.keys(), test::keys_weird());
+  EXPECT_EQ(argument.description(), "Weird argument.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "=w=k <number>, ==weird=key <number>");
+  EXPECT_EQ(argument.usage(), "==weird=key <number>");
+  EXPECT_EQ(argument.options(), "=w=k <number>, ==weird=key <number>  Weird argument.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::ThreeHundred);
+  argument.set_parsed_value(test::FourHundred);
+  EXPECT_EQ(argument.label(), test::Label::Weird);
+  EXPECT_EQ(argument.keys(), test::keys_weird());
+  EXPECT_EQ(argument.description(), "Weird argument.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::ThreeHundred);
+  EXPECT_EQ(argument.parsed_values().at(1), test::FourHundred);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::ThreeHundred);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::FourHundred);
+  EXPECT_EQ(argument.keys_with_value_type(), "=w=k <number>, ==weird=key <number>");
+  EXPECT_EQ(argument.usage(), "==weird=key <number>");
+  EXPECT_EQ(argument.options(), "=w=k <number>, ==weird=key <number>  Weird argument.");
+  EXPECT_EQ(argument.execution(), "==weird=key 300 ==weird=key 400");
 }
 
 TEST(Lector, SingularArgumentBooleanDefault) {
@@ -4603,7 +4931,7 @@ TEST(Lector, SingularArgumentFilesystemPathNamedOptional) {
   EXPECT_EQ(argument.keys_with_value_type(), "-o <path>, --output_directory <path>");
   EXPECT_EQ(argument.usage(), "[--output_directory <path>]");
   EXPECT_EQ(argument.options(), "-o <path>, --output_directory <path>  Output directory.");
-  EXPECT_EQ(argument.execution(), "--output_directory /some/other/path");
+  EXPECT_EQ(argument.execution(), "--output_directory \"/some/other/path\"");
 }
 
 TEST(Lector, SingularArgumentFilesystemPathNamedRequired) {
@@ -4656,7 +4984,7 @@ TEST(Lector, SingularArgumentFilesystemPathPositionalOptional) {
   EXPECT_EQ(argument.keys_with_value_type(), "<path>");
   EXPECT_EQ(argument.usage(), "[<path>]");
   EXPECT_EQ(argument.options(), "<path>  Output directory.");
-  EXPECT_EQ(argument.execution(), "/some/other/path");
+  EXPECT_EQ(argument.execution(), "\"/some/other/path\"");
 }
 
 TEST(Lector, SingularArgumentFilesystemPathPositionalRequired) {
@@ -5134,7 +5462,7 @@ TEST(Lector, SingularArgumentStringNamedOptional) {
   EXPECT_EQ(argument.keys_with_value_type(), "-t <text>, --title <text>");
   EXPECT_EQ(argument.usage(), "[--title <text>]");
   EXPECT_EQ(argument.options(), "-t <text>, --title <text>  Report title.");
-  EXPECT_EQ(argument.execution(), "--title My Other Report");
+  EXPECT_EQ(argument.execution(), "--title \"My Other Report\"");
 }
 
 TEST(Lector, SingularArgumentStringNamedRequired) {
@@ -5187,7 +5515,7 @@ TEST(Lector, SingularArgumentStringPositionalOptional) {
   EXPECT_EQ(argument.keys_with_value_type(), "<text>");
   EXPECT_EQ(argument.usage(), "[<text>]");
   EXPECT_EQ(argument.options(), "<text>  Report title.");
-  EXPECT_EQ(argument.execution(), "My Other Report");
+  EXPECT_EQ(argument.execution(), "\"My Other Report\"");
 }
 
 TEST(Lector, SingularArgumentStringPositionalRequired) {
@@ -5226,9 +5554,9 @@ TEST(Lector, SingularArgumentWeirdKeysDefault) {
   EXPECT_ANY_THROW(argument.set_parsed_value(test::TwoHundred));
 }
 
-TEST(Lector, SingularArgumentWeirdKeysNamedOptional) {
+TEST(Lector, SingularArgumentWeirdKeysOptional) {
   lector::SingularArgument<test::Label::Weird, std::int32_t> argument{
-    test::singular_argument_weird_keys_named_optional()};
+    test::singular_argument_weird_keys_optional()};
   EXPECT_EQ(argument.label(), test::Label::Weird);
   EXPECT_EQ(argument.keys(), test::keys_weird());
   EXPECT_EQ(argument.description(), "Weird argument.");
@@ -5261,9 +5589,9 @@ TEST(Lector, SingularArgumentWeirdKeysNamedOptional) {
   EXPECT_EQ(argument.execution(), "==weird=key 200");
 }
 
-TEST(Lector, SingularArgumentWeirdKeysNamedRequired) {
+TEST(Lector, SingularArgumentWeirdKeysRequired) {
   const lector::SingularArgument<test::Label::Weird, std::int32_t> argument{
-    test::singular_argument_weird_keys_named_required()};
+    test::singular_argument_weird_keys_required()};
   EXPECT_EQ(argument.label(), test::Label::Weird);
   EXPECT_EQ(argument.keys(), test::keys_weird());
   EXPECT_EQ(argument.description(), "Weird argument.");
@@ -5332,7 +5660,7 @@ TEST(Lector, TutorialSection1Basic) {
   };
   EXPECT_EQ(arguments.help(), expected_help);
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --output_directory /path/to/directory --iterations 200");
+            "/path/to/executable --output_directory \"/path/to/directory\" --iterations 200");
 }
 
 TEST(Lector, TutorialSection1Help) {
@@ -5387,8 +5715,9 @@ TEST(Lector, TutorialSection1Help) {
     "Additional notes about my application."
   };
   EXPECT_EQ(arguments.help(), expected_help);
-  EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --output_directory /path/to/directory --iterations 200 --help");
+  EXPECT_EQ(
+      arguments.execution(),
+      "/path/to/executable --output_directory \"/path/to/directory\" --iterations 200 --help");
 }
 
 TEST(Lector, TutorialSection3Subsection2) {
@@ -5428,7 +5757,7 @@ TEST(Lector, TutorialSection3Subsection2) {
   };
   EXPECT_EQ(arguments.help(), expected_help);
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable __out_dir__ /path/to/directory ==iterations== 200");
+            "/path/to/executable __out_dir__ \"/path/to/directory\" ==iterations== 200");
 }
 
 TEST(Lector, TutorialSection3Subsection3) {
