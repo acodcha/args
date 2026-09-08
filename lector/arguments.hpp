@@ -331,9 +331,16 @@ public:
 
   /// @brief Sets the parsed value of this singular command line argument.
   /// @param[in] value The parsed value to set.
+  /// @throws std::invalid_argument if this singular command line argument is boolean and the parsed
+  /// value is false.
   /// @throws std::logic_error if a parsed value has already been set for this singular command line
   /// argument.
   void set_parsed_value(const Type& value) {
+    if constexpr (std::is_same_v<Type, bool>) {
+      if (!value) {
+        throw std::invalid_argument("Boolean arguments can only be parsed as true.");
+      }
+    }
     if (parsed_value_.has_value()) {
       throw std::logic_error("A singular argument cannot have more than one parsed value.");
     }
@@ -411,18 +418,9 @@ public:
   /// @return The string of text that contains the execution of this command line argument.
   [[nodiscard]] std::string execution() const {
     if constexpr (std::is_same_v<Type, bool>) {
-      if (parsed_value_.has_value() && parsed_value_.value()) {
-        return longest_key();
-      }
-      return std::string{};
+      return execution_boolean();
     } else {
-      if (parsed_value_.has_value()) {
-        if (keys_.empty()) {
-          return lector::print<Type>(parsed_value_.value());
-        }
-        return longest_key() + " " + lector::print<Type>(parsed_value_.value());
-      }
-      return std::string{};
+      return execution_non_boolean();
     }
   }
 
@@ -438,7 +436,7 @@ private:
   /// @brief Validates that this command line argument is not boolean. Called by constructors that
   /// do not take keys. Boolean command line arguments must always specify one or more keys.
   void validate_non_boolean_positional() const {
-    if (std::is_same_v<Type, bool>) {
+    if constexpr (std::is_same_v<Type, bool>) {
       throw std::invalid_argument("Boolean arguments must specify one or more keys.");
     }
   }
@@ -525,6 +523,31 @@ private:
     return keys_[longest_key_index];
   }
 
+  /// @brief Prints the execution of this boolean command line argument as a string of text. The
+  /// execution consists of this boolean command line argument's longest key.
+  /// @return The string of text that contains the execution of this boolean command line argument.
+  [[nodiscard]] std::string execution_boolean() const {
+    if (parsed_value_.has_value() && parsed_value_.value()) {
+      return longest_key();
+    }
+    return std::string{};
+  }
+
+  /// @brief Prints the execution of this non-boolean command line argument as a string of text. The
+  /// execution consists of this non-boolean command line argument's longest key and parsed value,
+  /// if any.
+  /// @return The string of text that contains the execution of this non-boolean command line
+  /// argument.
+  [[nodiscard]] std::string execution_non_boolean() const {
+    if (parsed_value_.has_value()) {
+      if (keys_.empty()) {
+        return lector::print<Type>(parsed_value_.value());
+      }
+      return longest_key() + " " + lector::print<Type>(parsed_value_.value());
+    }
+    return std::string{};
+  }
+
   /// @brief Keys that can be used to specify this argument on the command line if it is a named
   /// argument, or an empty collection if this argument is a positional argument. Set at
   /// construction.
@@ -554,8 +577,6 @@ private:
 template <auto LabelValue, typename Type>
 class RepeatableArgument final {
 public:
-  static_assert(!std::is_same_v<Type, bool>, "Repeated boolean arguments are not supported.");
-
   using ValueType = Type;
 
   /// @brief Default constructor. Initializes the repeatable command line argument with no keys, an
@@ -705,7 +726,14 @@ public:
 
   /// @brief Inserts an additional parsed value into this repeatable command line argument.
   /// @param[in] value The parsed value to insert.
+  /// @throws std::invalid_argument if this singular command line argument is boolean and the parsed
+  /// value is false.
   void set_parsed_value(const Type& value) {
+    if constexpr (std::is_same_v<Type, bool>) {
+      if (!value) {
+        throw std::invalid_argument("Boolean arguments can only be parsed as true.");
+      }
+    }
     parsed_values_.push_back(value);
   }
 
@@ -780,49 +808,17 @@ public:
   /// @return The string of text that contains the execution of this command line argument.
   [[nodiscard]] std::string execution() const {
     if constexpr (std::is_same_v<Type, bool>) {
-      if (!parsed_values_.empty()) {
-        std::string result;
-        for (const Type& parsed_value : parsed_values_) {
-          if (!result.empty()) {
-            result.push_back(' ');
-          }
-          result.append(longest_key());
-        }
-        return result;
-      }
-      return std::string{};
+      return execution_boolean();
     } else {
-      if (!parsed_values_.empty()) {
-        if (keys_.empty()) {
-          std::string result;
-          for (const Type& parsed_value : parsed_values_) {
-            if (!result.empty()) {
-              result.push_back(' ');
-            }
-            result.append(lector::print<Type>(parsed_value));
-          }
-          return result;
-        }
-        std::string result;
-        for (const Type& parsed_value : parsed_values_) {
-          if (!result.empty()) {
-            result.push_back(' ');
-          }
-          result.append(longest_key());
-          result.push_back(' ');
-          result.append(lector::print<Type>(parsed_value));
-        }
-        return result;
-      }
-      return std::string{};
+      return execution_non_boolean();
     }
   }
 
 private:
   /// @brief Validates that this command line argument is not boolean. Called by constructors that
   /// do not take keys. Boolean command line arguments must always specify one or more keys.
-  void validate_non_boolean_positional() const {
-    if (std::is_same_v<Type, bool>) {
+  void constexpr validate_non_boolean_positional() const {
+    if constexpr (std::is_same_v<Type, bool>) {
       throw std::invalid_argument("Boolean arguments must specify one or more keys.");
     }
   }
@@ -830,7 +826,7 @@ private:
   /// @brief Validates that this command line argument is not boolean. Called by constructors that
   /// take default values. Boolean command line arguments are always optional and always default to
   /// false, so they cannot specify default values.
-  void validate_non_boolean_default_values() const {
+  void constexpr validate_non_boolean_default_values() const {
     if constexpr (std::is_same_v<Type, bool>) {
       throw std::invalid_argument(
           "Boolean arguments cannot specify default values; they are always false by default.");
@@ -907,6 +903,50 @@ private:
       }
     }
     return keys_[longest_key_index];
+  }
+
+  /// @brief Prints the execution of this boolean command line argument as a string of text. The
+  /// execution consists of this boolean command line argument's longest key for each parsed value.
+  /// @return The string of text that contains the execution of this boolean command line argument.
+  [[nodiscard]] std::string execution_boolean() const {
+    std::string result;
+    for (const Type& parsed_value : parsed_values_) {
+      if (parsed_value) {
+        if (!result.empty()) {
+          result.push_back(' ');
+        }
+        result.append(longest_key());
+      }
+    }
+    return result;
+  }
+
+  /// @brief Prints the execution of this non-boolean command line argument as a string of text. The
+  /// execution consists of this non-boolean command line argument's longest key and parsed values,
+  /// if any.
+  /// @return The string of text that contains the execution of this non-boolean command line
+  /// argument.
+  [[nodiscard]] std::string execution_non_boolean() const {
+    if (keys_.empty()) {
+      std::string result;
+      for (const Type& parsed_value : parsed_values_) {
+        if (!result.empty()) {
+          result.push_back(' ');
+        }
+        result.append(lector::print<Type>(parsed_value));
+      }
+      return result;
+    }
+    std::string result;
+    for (const Type& parsed_value : parsed_values_) {
+      if (!result.empty()) {
+        result.push_back(' ');
+      }
+      result.append(longest_key());
+      result.push_back(' ');
+      result.append(lector::print<Type>(parsed_value));
+    }
+    return result;
   }
 
   /// @brief Keys that can be used to specify this argument on the command line if it is a named
