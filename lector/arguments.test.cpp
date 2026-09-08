@@ -244,6 +244,13 @@ std::vector<std::string> keys_weird() {
   return std::vector<std::string>{"=w=k", "==weird=key"};
 }
 
+/// @brief Helper function that creates a repeatable named optional boolean command line argument.
+/// @return The repeatable named optional boolean command line argument.
+lector::RepeatableArgument<test::Label::Help, bool> repeatable_argument_boolean() {
+  return lector::RepeatableArgument<test::Label::Help, bool>{
+    test::keys_boolean(), "Display this help information and exit. Optional."};
+}
+
 /// @brief Helper function that creates a repeatable named optional integer command line argument.
 /// @return The repeatable named optional integer command line argument.
 lector::RepeatableArgument<test::Label::Iterations, std::int32_t>
@@ -280,146 +287,273 @@ repeatable_argument_integer_positional_required() {
   return lector::RepeatableArgument<test::Label::Iterations, std::int32_t>{"Number of iterations."};
 }
 
-lector::SingularArgument<test::Label::Help, bool> singular_argument_boolean_named() {
+/// @brief Helper function that creates an invalid repeatable named required argument with all empty
+/// keys.
+void repeatable_argument_invalid_all_empty_keys() {
+  const lector::RepeatableArgument<test::Label::Iterations, std::int32_t> argument{
+    std::vector<std::string>{"", ""},
+    "Number of iterations."
+  };
+}
+
+/// @brief Helper function that creates an invalid repeatable named required argument with an empty
+/// key.
+void repeatable_argument_invalid_an_empty_key() {
+  const lector::RepeatableArgument<test::Label::Iterations, std::int32_t> argument{
+    std::vector<std::string>{"-i", "--iterations", ""},
+    "Number of iterations."
+  };
+}
+
+/// @brief Helper function that creates an invalid repeatable positional required boolean argument.
+/// Boolean command line must always specify one or more keys.
+void repeatable_argument_invalid_boolean_positional() {
+  const lector::RepeatableArgument<test::Label::Help, bool> argument{
+    "Display this help information and exit. Optional."};
+}
+
+/// @brief Helper function that creates an invalid repeatable named optional boolean argument.
+/// Boolean command line arguments are always optional and always default to false, so they cannot
+/// specify default values.
+void repeatable_argument_invalid_boolean_with_default_values() {
+  const lector::RepeatableArgument<test::Label::Help, bool> argument{
+    test::keys_boolean(), "Display this help information and exit. Optional.",
+    std::vector<bool>{true, true}
+  };
+}
+
+/// @brief Helper function that creates an invalid repeatable named required argument with duplicate
+/// keys.
+void repeatable_argument_invalid_duplicate_keys() {
+  const lector::RepeatableArgument<test::Label::Iterations, std::int32_t> argument{
+    std::vector<std::string>{"-i", "--iterations", "-i"},
+    "Number of iterations."
+  };
+}
+
+/// @brief Helper function that creates an invalid repeatable named required argument with an empty
+/// description.
+void repeatable_argument_invalid_empty_description() {
+  const lector::RepeatableArgument<test::Label::Iterations, std::int32_t> argument{
+    test::keys_integer(), ""};
+}
+
+/// @brief Helper function that creates an invalid repeatable named required argument with no keys.
+void repeatable_argument_invalid_no_keys() {
+  const lector::RepeatableArgument<test::Label::Iterations, std::int32_t> argument{
+    std::vector<std::string>{}, "Number of iterations."};
+}
+
+/// @brief Helper function that creates a singular named optional boolean command line argument.
+/// @return The singular named optional boolean command line argument.
+lector::SingularArgument<test::Label::Help, bool> singular_argument_boolean() {
   return lector::SingularArgument<test::Label::Help, bool>{
     test::keys_boolean(), "Display this help information and exit. Optional."};
 }
 
+/// @brief Helper function that creates a singular named optional command line argument with a long
+/// confusing key.
+/// @return The singular named optional command line argument with a long confusing key.
 lector::SingularArgument<test::Label::ConfusingLong, std::int32_t>
 singular_argument_confusing_long() {
   return lector::SingularArgument<test::Label::ConfusingLong, std::int32_t>{
     std::vector<std::string>{"--key=200"}, "Long confusing argument.", test::OneHundred};
 }
 
+/// @brief Helper function that creates a singular named optional command line argument with a short
+/// confusing key.
+/// @return The singular named optional command line argument with a short confusing key.
 lector::SingularArgument<test::Label::ConfusingShort, std::int32_t>
 singular_argument_confusing_short() {
   return lector::SingularArgument<test::Label::ConfusingShort, std::int32_t>{
     std::vector<std::string>{"--key"}, "Short confusing argument.", test::OneHundred};
 }
 
+/// @brief Helper function that creates a singular named optional data structure command line
+/// argument.
+/// @return The singular named optional data structure command line argument.
 lector::SingularArgument<test::Label::Point, test::Point>
 singular_argument_data_structure_named_optional() {
   return lector::SingularArgument<test::Label::Point, test::Point>{
     test::keys_data_structure(), "Starting point.", test::FirstPoint};
 }
 
+/// @brief Helper function that creates a singular named required data structure command line
+/// argument.
+/// @return The singular named required data structure command line argument.
 lector::SingularArgument<test::Label::Point, test::Point>
 singular_argument_data_structure_named_required() {
   return lector::SingularArgument<test::Label::Point, test::Point>{
     test::keys_data_structure(), "Starting point."};
 }
 
+/// @brief Helper function that creates a singular positional optional data structure command line
+/// argument.
+/// @return The singular positional optional data structure command line argument.
 lector::SingularArgument<test::Label::Point, test::Point>
 singular_argument_data_structure_positional_optional() {
   return lector::SingularArgument<test::Label::Point, test::Point>{
     "Starting point.", test::FirstPoint};
 }
 
+/// @brief Helper function that creates a singular positional required data structure command line
+/// argument.
+/// @return The singular positional required data structure command line argument.
 lector::SingularArgument<test::Label::Point, test::Point>
 singular_argument_data_structure_positional_required() {
   return lector::SingularArgument<test::Label::Point, test::Point>{"Starting point."};
 }
 
+/// @brief Helper function that creates a singular named optional enumeration command line argument.
+/// @return The singular named optional enumeration command line argument.
 lector::SingularArgument<test::Label::Shape, test::Shape>
 singular_argument_enumeration_named_optional() {
   return lector::SingularArgument<test::Label::Shape, test::Shape>{
     test::keys_enumeration(), "Favorite shape.", test::Shape::Circle};
 }
 
+/// @brief Helper function that creates a singular named required enumeration command line argument.
+/// @return The singular named required enumeration command line argument.
 lector::SingularArgument<test::Label::Shape, test::Shape>
 singular_argument_enumeration_named_required() {
   return lector::SingularArgument<test::Label::Shape, test::Shape>{
     test::keys_enumeration(), "Favorite shape."};
 }
 
+/// @brief Helper function that creates a singular positional optional enumeration command line
+/// argument.
+/// @return The singular positional optional enumeration command line argument.
 lector::SingularArgument<test::Label::Shape, test::Shape>
 singular_argument_enumeration_positional_optional() {
   return lector::SingularArgument<test::Label::Shape, test::Shape>{
     "Favorite shape.", test::Shape::Circle};
 }
 
+/// @brief Helper function that creates a singular positional required enumeration command line
+/// argument.
+/// @return The singular positional required enumeration command line argument.
 lector::SingularArgument<test::Label::Shape, test::Shape>
 singular_argument_enumeration_positional_required() {
   return lector::SingularArgument<test::Label::Shape, test::Shape>{"Favorite shape."};
 }
 
+/// @brief Helper function that creates a singular named optional filesystem path command line
+/// argument.
+/// @return The singular named optional filesystem path command line argument.
 lector::SingularArgument<test::Label::OutputDirectory, std::filesystem::path>
 singular_argument_filesystem_path_named_optional() {
   return lector::SingularArgument<test::Label::OutputDirectory, std::filesystem::path>{
     test::keys_filesystem_path(), "Output directory.", std::filesystem::path("/some/path")};
 }
 
+/// @brief Helper function that creates a singular named required filesystem path command line
+/// argument.
+/// @return The singular named required filesystem path command line argument.
 lector::SingularArgument<test::Label::OutputDirectory, std::filesystem::path>
 singular_argument_filesystem_path_named_required() {
   return lector::SingularArgument<test::Label::OutputDirectory, std::filesystem::path>{
     test::keys_filesystem_path(), "Output directory."};
 }
 
+/// @brief Helper function that creates a singular positional optional filesystem path command line
+/// argument.
+/// @return The singular positional optional filesystem path command line argument.
 lector::SingularArgument<test::Label::OutputDirectory, std::filesystem::path>
 singular_argument_filesystem_path_positional_optional() {
   return lector::SingularArgument<test::Label::OutputDirectory, std::filesystem::path>{
     "Output directory.", std::filesystem::path("/some/path")};
 }
 
+/// @brief Helper function that creates a singular positional required filesystem path command line
+/// argument.
+/// @return The singular positional required filesystem path command line argument.
 lector::SingularArgument<test::Label::OutputDirectory, std::filesystem::path>
 singular_argument_filesystem_path_positional_required() {
   return lector::SingularArgument<test::Label::OutputDirectory, std::filesystem::path>{
     "Output directory."};
 }
 
+/// @brief Helper function that creates a singular named optional floating-point number command line
+/// argument.
+/// @return The singular named optional floating-point number command line argument.
 lector::SingularArgument<test::Label::Tolerance, double>
 singular_argument_floating_point_number_named_optional() {
   return lector::SingularArgument<test::Label::Tolerance, double>{
     test::keys_floating_point_number(), "Tolerance value.", test::OneOverThirtyTwo};
 }
 
+/// @brief Helper function that creates a singular named required floating-point number command line
+/// argument.
+/// @return The singular named required floating-point number command line argument.
 lector::SingularArgument<test::Label::Tolerance, double>
 singular_argument_floating_point_number_named_required() {
   return lector::SingularArgument<test::Label::Tolerance, double>{
     test::keys_floating_point_number(), "Tolerance value."};
 }
 
+/// @brief Helper function that creates a singular positional optional floating-point number command
+/// line argument.
+/// @return The singular positional optional floating-point number command line argument.
 lector::SingularArgument<test::Label::Tolerance, double>
 singular_argument_floating_point_number_positional_optional() {
   return lector::SingularArgument<test::Label::Tolerance, double>{
     "Tolerance value.", test::OneOverThirtyTwo};
 }
 
+/// @brief Helper function that creates a singular positional required floating-point number command
+/// line argument.
+/// @return The singular positional required floating-point number command line argument.
 lector::SingularArgument<test::Label::Tolerance, double>
 singular_argument_floating_point_number_positional_required() {
   return lector::SingularArgument<test::Label::Tolerance, double>{"Tolerance value."};
 }
 
+/// @brief Helper function that creates a singular named optional integer command line argument with
+/// differing keys.
+/// @return The singular named optional integer command line argument with differing keys.
 lector::SingularArgument<test::Label::IterationsAgain, std::int32_t>
 singular_argument_integer_again_different_keys() {
   return lector::SingularArgument<test::Label::IterationsAgain, std::int32_t>{
     test::keys_integer_again_different_keys(), "Number of iterations, again.", test::OneHundred};
 }
 
+/// @brief Helper function that creates a singular named optional integer command line argument with
+/// duplicate keys.
+/// @return The singular named optional integer command line argument with duplicate keys.
 lector::SingularArgument<test::Label::IterationsAgain, std::int32_t>
 singular_argument_integer_again_duplicate_keys() {
   return lector::SingularArgument<test::Label::IterationsAgain, std::int32_t>{
     test::keys_integer_again_duplicate_keys(), "Number of iterations, again.", test::OneHundred};
 }
 
+/// @brief Helper function that creates a singular named optional integer command line argument.
+/// @return The singular named optional integer command line argument.
 lector::SingularArgument<test::Label::Iterations, std::int32_t>
 singular_argument_integer_named_optional() {
   return lector::SingularArgument<test::Label::Iterations, std::int32_t>{
     test::keys_integer(), "Number of iterations.", test::OneHundred};
 }
 
+/// @brief Helper function that creates a singular named required integer command line argument.
+/// @return The singular named required integer command line argument.
 lector::SingularArgument<test::Label::Iterations, std::int32_t>
 singular_argument_integer_named_required() {
   return lector::SingularArgument<test::Label::Iterations, std::int32_t>{
     test::keys_integer(), "Number of iterations."};
 }
 
+/// @brief Helper function that creates a singular positional optional integer command line
+/// argument.
+/// @return The singular positional optional integer command line argument.
 lector::SingularArgument<test::Label::Iterations, std::int32_t>
 singular_argument_integer_positional_optional() {
   return lector::SingularArgument<test::Label::Iterations, std::int32_t>{
     "Number of iterations.", test::OneHundred};
 }
 
+/// @brief Helper function that creates a singular positional required integer command line
+/// argument.
+/// @return The singular positional required integer command line argument.
 lector::SingularArgument<test::Label::Iterations, std::int32_t>
 singular_argument_integer_positional_required() {
   return lector::SingularArgument<test::Label::Iterations, std::int32_t>{"Number of iterations."};
@@ -480,34 +614,48 @@ void singular_argument_invalid_no_keys() {
     std::vector<std::string>{}, "Number of iterations."};
 }
 
+/// @brief Helper function that creates a singular named optional string command line argument.
+/// @return The singular named optional string command line argument.
 lector::SingularArgument<test::Label::Title, std::string>
 singular_argument_string_named_optional() {
   return lector::SingularArgument<test::Label::Title, std::string>{
     test::keys_string(), "Report title.", "My Report"};
 }
 
+/// @brief Helper function that creates a singular named required string command line argument.
+/// @return The singular named required string command line argument.
 lector::SingularArgument<test::Label::Title, std::string>
 singular_argument_string_named_required() {
   return lector::SingularArgument<test::Label::Title, std::string>{
     test::keys_string(), "Report title."};
 }
 
+/// @brief Helper function that creates a singular positional optional string command line argument.
+/// @return The singular positional optional string command line argument.
 lector::SingularArgument<test::Label::Title, std::string>
 singular_argument_string_positional_optional() {
   return lector::SingularArgument<test::Label::Title, std::string>{"Report title.", "My Report"};
 }
 
+/// @brief Helper function that creates a singular positional required string command line argument.
+/// @return The singular positional required string command line argument.
 lector::SingularArgument<test::Label::Title, std::string>
 singular_argument_string_positional_required() {
   return lector::SingularArgument<test::Label::Title, std::string>{"Report title."};
 }
 
+/// @brief Helper function that creates a singular named optional integer command line argument with
+/// weird keys.
+/// @return The singular named optional integer command line argument with weird keys.
 lector::SingularArgument<test::Label::Weird, std::int32_t>
 singular_argument_weird_keys_named_optional() {
   return lector::SingularArgument<test::Label::Weird, std::int32_t>{
     test::keys_weird(), "Weird argument.", test::OneHundred};
 }
 
+/// @brief Helper function that creates a singular named required integer command line argument with
+/// weird keys.
+/// @return The singular named required integer command line argument with weird keys.
 lector::SingularArgument<test::Label::Weird, std::int32_t>
 singular_argument_weird_keys_named_required() {
   return lector::SingularArgument<test::Label::Weird, std::int32_t>{
@@ -524,7 +672,8 @@ public:
 
   /// @brief Constructor. Builds argc and argv from the initializer list.
   /// @param[in] arguments The list of command line arguments, starting with the executable path.
-  explicit Command(std::vector<std::string> arguments) : argc_{static_cast<int>(arguments.size())} {
+  explicit Command(const std::vector<std::string>& arguments)
+    : argc_{static_cast<int>(arguments.size())} {
     // Allocate the argv array. Note that the argv array must be null-terminated by the C standard;
     // the +1 is for the null terminator at the end of the argv array.
     argv_ = new char*[argc_ + 1];
@@ -638,7 +787,7 @@ static_assert(
 
 TEST(Lector, ArgumentsDuplicatedArgumentInlineNoConfiguration) {
   lector::Arguments arguments{
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--iterations=200", "--iterations=300", "--help"}
   };
@@ -648,7 +797,7 @@ TEST(Lector, ArgumentsDuplicatedArgumentInlineNoConfiguration) {
 TEST(Lector, ArgumentsDuplicatedArgumentInlineWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_integer_named_optional(),
-    test::singular_argument_boolean_named()};
+    test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--iterations=200", "--iterations=300", "--help"}
   };
@@ -657,7 +806,7 @@ TEST(Lector, ArgumentsDuplicatedArgumentInlineWithConfiguration) {
 
 TEST(Lector, ArgumentsDuplicatedArgumentMixedNoConfiguration) {
   lector::Arguments arguments{
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--iterations", "200", "--iterations=300", "--help"}
   };
@@ -667,7 +816,7 @@ TEST(Lector, ArgumentsDuplicatedArgumentMixedNoConfiguration) {
 TEST(Lector, ArgumentsDuplicatedArgumentMixedWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_integer_named_optional(),
-    test::singular_argument_boolean_named()};
+    test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--iterations", "200", "--iterations=300", "--help"}
   };
@@ -676,7 +825,7 @@ TEST(Lector, ArgumentsDuplicatedArgumentMixedWithConfiguration) {
 
 TEST(Lector, ArgumentsDuplicatedArgumentWhitespaceNoConfiguration) {
   lector::Arguments arguments{
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--iterations", "200", "--iterations", "300", "--help"}
   };
@@ -686,7 +835,7 @@ TEST(Lector, ArgumentsDuplicatedArgumentWhitespaceNoConfiguration) {
 TEST(Lector, ArgumentsDuplicatedArgumentWhitespaceWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_integer_named_optional(),
-    test::singular_argument_boolean_named()};
+    test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--iterations", "200", "--iterations", "300", "--help"}
   };
@@ -765,7 +914,7 @@ TEST(Lector, ArgumentsEmptyNoExecutableWithConfiguration) {
 
 TEST(Lector, ArgumentsExtraTokenNoConfiguration) {
   lector::Arguments arguments{
-    test::singular_argument_integer_positional_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_positional_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "200", "300", "--help"}
   };
@@ -775,7 +924,7 @@ TEST(Lector, ArgumentsExtraTokenNoConfiguration) {
 TEST(Lector, ArgumentsExtraTokenWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_integer_positional_optional(),
-    test::singular_argument_boolean_named()};
+    test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "200", "300", "--help"}
   };
@@ -784,7 +933,7 @@ TEST(Lector, ArgumentsExtraTokenWithConfiguration) {
 
 TEST(Lector, ArgumentsInvalidValueForArgumentNamedInlineNoConfiguration) {
   lector::Arguments arguments{
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--iterations=Hello", "--help"}
   };
@@ -794,7 +943,7 @@ TEST(Lector, ArgumentsInvalidValueForArgumentNamedInlineNoConfiguration) {
 TEST(Lector, ArgumentsInvalidValueForArgumentNamedInlineWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_integer_named_optional(),
-    test::singular_argument_boolean_named()};
+    test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--iterations=Hello", "--help"}
   };
@@ -803,7 +952,7 @@ TEST(Lector, ArgumentsInvalidValueForArgumentNamedInlineWithConfiguration) {
 
 TEST(Lector, ArgumentsInvalidValueForArgumentNamedWhitespaceNoConfiguration) {
   lector::Arguments arguments{
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--iterations", "Hello", "--help"}
   };
@@ -813,7 +962,7 @@ TEST(Lector, ArgumentsInvalidValueForArgumentNamedWhitespaceNoConfiguration) {
 TEST(Lector, ArgumentsInvalidValueForArgumentNamedWhitespaceWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_integer_named_optional(),
-    test::singular_argument_boolean_named()};
+    test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--iterations", "Hello", "--help"}
   };
@@ -822,7 +971,7 @@ TEST(Lector, ArgumentsInvalidValueForArgumentNamedWhitespaceWithConfiguration) {
 
 TEST(Lector, ArgumentsInvalidValueForArgumentPositionalNoConfiguration) {
   lector::Arguments arguments{
-    test::singular_argument_integer_positional_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_positional_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "Hello", "--help"}
   };
@@ -832,7 +981,7 @@ TEST(Lector, ArgumentsInvalidValueForArgumentPositionalNoConfiguration) {
 TEST(Lector, ArgumentsInvalidValueForArgumentPositionalWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_integer_positional_optional(),
-    test::singular_argument_boolean_named()};
+    test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "Hello", "--help"}
   };
@@ -840,8 +989,8 @@ TEST(Lector, ArgumentsInvalidValueForArgumentPositionalWithConfiguration) {
 }
 
 TEST(Lector, ArgumentsMissingArgumentRequiredNoConfiguration) {
-  lector::Arguments arguments{test::singular_argument_filesystem_path_named_required(),
-                              test::singular_argument_boolean_named()};
+  lector::Arguments arguments{
+    test::singular_argument_filesystem_path_named_required(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--help"}
   };
@@ -851,7 +1000,7 @@ TEST(Lector, ArgumentsMissingArgumentRequiredNoConfiguration) {
 TEST(Lector, ArgumentsMissingArgumentRequiredWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_boolean_named()};
+    test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--help"}
   };
@@ -859,8 +1008,8 @@ TEST(Lector, ArgumentsMissingArgumentRequiredWithConfiguration) {
 }
 
 TEST(Lector, ArgumentsMissingArgumentOptionalInlineNoConfiguration) {
-  lector::Arguments arguments{test::singular_argument_filesystem_path_named_required(),
-                              test::singular_argument_boolean_named()};
+  lector::Arguments arguments{
+    test::singular_argument_filesystem_path_named_required(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--output_directory=/path/to/output"}
   };
@@ -876,7 +1025,7 @@ TEST(Lector, ArgumentsMissingArgumentOptionalInlineNoConfiguration) {
 TEST(Lector, ArgumentsMissingArgumentOptionalInlineWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_boolean_named()};
+    test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--output_directory=/path/to/output"}
   };
@@ -890,8 +1039,8 @@ TEST(Lector, ArgumentsMissingArgumentOptionalInlineWithConfiguration) {
 }
 
 TEST(Lector, ArgumentsMissingArgumentOptionalWhitespaceNoConfiguration) {
-  lector::Arguments arguments{test::singular_argument_filesystem_path_named_required(),
-                              test::singular_argument_boolean_named()};
+  lector::Arguments arguments{
+    test::singular_argument_filesystem_path_named_required(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--output_directory", "/path/to/output"}
   };
@@ -907,7 +1056,7 @@ TEST(Lector, ArgumentsMissingArgumentOptionalWhitespaceNoConfiguration) {
 TEST(Lector, ArgumentsMissingArgumentOptionalWhitespaceWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_boolean_named()};
+    test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--output_directory", "/path/to/output"}
   };
@@ -922,7 +1071,7 @@ TEST(Lector, ArgumentsMissingArgumentOptionalWhitespaceWithConfiguration) {
 
 TEST(Lector, ArgumentsMissingValueArgumentFirstNoConfiguration) {
   lector::Arguments arguments{
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--iterations", "--help"}
   };
@@ -932,7 +1081,7 @@ TEST(Lector, ArgumentsMissingValueArgumentFirstNoConfiguration) {
 TEST(Lector, ArgumentsMissingValueArgumentFirstWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_integer_named_optional(),
-    test::singular_argument_boolean_named()};
+    test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--iterations", "--help"}
   };
@@ -959,7 +1108,7 @@ TEST(Lector, ArgumentsMissingValueArgumentLastWithConfiguration) {
 TEST(Lector, ArgumentsMissingValueArgumentMiddleInlineNoConfiguration) {
   lector::Arguments arguments{
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--output_directory=/path/to/output", "--iterations", "--help"}
   };
@@ -969,7 +1118,7 @@ TEST(Lector, ArgumentsMissingValueArgumentMiddleInlineNoConfiguration) {
 TEST(Lector, ArgumentsMissingValueArgumentMiddleInlineWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--output_directory=/path/to/output", "--iterations", "--help"}
   };
@@ -979,7 +1128,7 @@ TEST(Lector, ArgumentsMissingValueArgumentMiddleInlineWithConfiguration) {
 TEST(Lector, ArgumentsMissingValueArgumentMiddleWhitespaceNoConfiguration) {
   lector::Arguments arguments{
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--output_directory", "/path/to/output", "--iterations", "--help"}
   };
@@ -989,7 +1138,7 @@ TEST(Lector, ArgumentsMissingValueArgumentMiddleWhitespaceNoConfiguration) {
 TEST(Lector, ArgumentsMissingValueArgumentMiddleWhitespaceWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--output_directory", "/path/to/output", "--iterations", "--help"}
   };
@@ -1411,7 +1560,7 @@ TEST(Lector, ArgumentsValidConfusingWhitespaceLongShortShortWithConfiguration) {
 }
 
 TEST(Lector, ArgumentsValidIndividualHelpNotSpecifiedNoConfiguration) {
-  lector::Arguments arguments{test::singular_argument_boolean_named()};
+  lector::Arguments arguments{test::singular_argument_boolean()};
   const test::Command command{{"/path/to/executable"}};
   arguments.parse(command.argc(), command.argv());
   EXPECT_EQ(arguments.executable_path(), std::filesystem::path("/path/to/executable"));
@@ -1431,7 +1580,7 @@ TEST(Lector, ArgumentsValidIndividualHelpNotSpecifiedNoConfiguration) {
 }
 
 TEST(Lector, ArgumentsValidIndividualHelpNotSpecifiedWithConfiguration) {
-  lector::Arguments arguments{test::configuration(), test::singular_argument_boolean_named()};
+  lector::Arguments arguments{test::configuration(), test::singular_argument_boolean()};
   const test::Command command{{"/path/to/executable"}};
   arguments.parse(command.argc(), command.argv());
   EXPECT_EQ(arguments.executable_path(), std::filesystem::path("/path/to/executable"));
@@ -1454,7 +1603,7 @@ TEST(Lector, ArgumentsValidIndividualHelpNotSpecifiedWithConfiguration) {
 }
 
 TEST(Lector, ArgumentsValidIndividualHelpSpecifiedNoConfiguration) {
-  lector::Arguments arguments{test::singular_argument_boolean_named()};
+  lector::Arguments arguments{test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--help"}
   };
@@ -1477,7 +1626,7 @@ TEST(Lector, ArgumentsValidIndividualHelpSpecifiedNoConfiguration) {
 }
 
 TEST(Lector, ArgumentsValidIndividualHelpSpecifiedWithConfiguration) {
-  lector::Arguments arguments{test::configuration(), test::singular_argument_boolean_named()};
+  lector::Arguments arguments{test::configuration(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--help"}
   };
@@ -2060,7 +2209,7 @@ TEST(Lector, ArgumentsValidManyInlineLongKeysNoConfiguration) {
   lector::Arguments arguments{
     test::singular_argument_enumeration_named_required(),
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--shape=Circle", "--output_directory=/path/to/output",
      "--iterations=200", "--help"}
@@ -2104,7 +2253,7 @@ TEST(Lector, ArgumentsValidManyInlineLongKeysWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_enumeration_named_required(),
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--shape=Circle", "--output_directory=/path/to/output",
      "--iterations=200", "--help"}
@@ -2151,7 +2300,7 @@ TEST(Lector, ArgumentsValidManyInlineShortKeysNoConfiguration) {
   lector::Arguments arguments{
     test::singular_argument_enumeration_named_required(),
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "-s=Circle", "-o=/path/to/output", "-i=200", "-h"}
   };
@@ -2194,7 +2343,7 @@ TEST(Lector, ArgumentsValidManyInlineShortKeysWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_enumeration_named_required(),
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "-s=Circle", "-o=/path/to/output", "-i=200", "-h"}
   };
@@ -2240,7 +2389,7 @@ TEST(Lector, ArgumentsValidManyMixedLongKeysNoConfiguration) {
   lector::Arguments arguments{
     test::singular_argument_enumeration_named_required(),
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--shape=Circle", "--output_directory=/path/to/output",
      "--iterations=200", "--help"}
@@ -2284,7 +2433,7 @@ TEST(Lector, ArgumentsValidManyMixedLongKeysWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_enumeration_named_required(),
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--shape=Circle", "--output_directory=/path/to/output",
      "--iterations=200", "--help"}
@@ -2331,7 +2480,7 @@ TEST(Lector, ArgumentsValidManyMixedShortKeysNoConfiguration) {
   lector::Arguments arguments{
     test::singular_argument_enumeration_named_required(),
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "-s=Circle", "-o", "/path/to/output", "-i=200", "-h"}
   };
@@ -2374,7 +2523,7 @@ TEST(Lector, ArgumentsValidManyMixedShortKeysWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_enumeration_named_required(),
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "-s=Circle", "-o", "/path/to/output", "-i=200", "-h"}
   };
@@ -2420,7 +2569,7 @@ TEST(Lector, ArgumentsValidManyPositionalNoConfiguration) {
   lector::Arguments arguments{
     test::singular_argument_enumeration_positional_required(),
     test::singular_argument_filesystem_path_positional_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "Circle", "/path/to/output", "-i", "200", "-h"}
   };
@@ -2461,7 +2610,7 @@ TEST(Lector, ArgumentsValidManyPositionalWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_enumeration_positional_required(),
     test::singular_argument_filesystem_path_positional_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "Circle", "/path/to/output", "-i", "200", "-h"}
   };
@@ -2505,7 +2654,7 @@ TEST(Lector, ArgumentsValidManyWhitespaceLongKeysNoConfiguration) {
   lector::Arguments arguments{
     test::singular_argument_enumeration_named_required(),
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--shape", "Circle", "--output_directory", "/path/to/output",
      "--iterations", "200", "--help"}
@@ -2549,7 +2698,7 @@ TEST(Lector, ArgumentsValidManyWhitespaceLongKeysWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_enumeration_named_required(),
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--shape", "Circle", "--output_directory", "/path/to/output",
      "--iterations", "200", "--help"}
@@ -2596,7 +2745,7 @@ TEST(Lector, ArgumentsValidManyWhitespaceShortKeysNoConfiguration) {
   lector::Arguments arguments{
     test::singular_argument_enumeration_named_required(),
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "-s", "Circle", "-o", "/path/to/output", "-i", "200", "-h"}
   };
@@ -2639,7 +2788,7 @@ TEST(Lector, ArgumentsValidManyWhitespaceShortKeysWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_enumeration_named_required(),
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "-s", "Circle", "-o", "/path/to/output", "-i", "200", "-h"}
   };
@@ -2747,7 +2896,7 @@ TEST(Lector, ArgumentsValidSeveralIterationsIterationsAgainWithConfiguration) {
 
 TEST(Lector, ArgumentsValidSeveralIterationsHelpNoConfiguration) {
   lector::Arguments arguments{
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--iterations", "200", "--help"}
   };
@@ -2777,7 +2926,7 @@ TEST(Lector, ArgumentsValidSeveralIterationsHelpNoConfiguration) {
 TEST(Lector, ArgumentsValidSeveralIterationsHelpWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_integer_named_optional(),
-    test::singular_argument_boolean_named()};
+    test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--iterations", "200", "--help"}
   };
@@ -2808,8 +2957,8 @@ TEST(Lector, ArgumentsValidSeveralIterationsHelpWithConfiguration) {
 }
 
 TEST(Lector, ArgumentsValidSeveralOutputDirectoryHelpNoConfiguration) {
-  lector::Arguments arguments{test::singular_argument_filesystem_path_named_required(),
-                              test::singular_argument_boolean_named()};
+  lector::Arguments arguments{
+    test::singular_argument_filesystem_path_named_required(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--output_directory", "/path/to/output", "--help"}
   };
@@ -2840,7 +2989,7 @@ TEST(Lector, ArgumentsValidSeveralOutputDirectoryHelpNoConfiguration) {
 TEST(Lector, ArgumentsValidSeveralOutputDirectoryHelpWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_boolean_named()};
+    test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--output_directory", "/path/to/output", "--help"}
   };
@@ -2874,7 +3023,7 @@ TEST(Lector, ArgumentsValidSeveralOutputDirectoryHelpWithConfiguration) {
 TEST(Lector, ArgumentsValidSeveralOutputDirectoryIterationsHelpNoConfiguration) {
   lector::Arguments arguments{
     test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--output_directory", "/path/to/output", "--iterations", "200",
      "--help"}
@@ -2912,7 +3061,7 @@ TEST(Lector, ArgumentsValidSeveralOutputDirectoryIterationsHelpNoConfiguration) 
 TEST(Lector, ArgumentsValidSeveralOutputDirectoryIterationsHelpWithConfiguration) {
   lector::Arguments arguments{
     test::configuration(), test::singular_argument_filesystem_path_named_required(),
-    test::singular_argument_integer_named_optional(), test::singular_argument_boolean_named()};
+    test::singular_argument_integer_named_optional(), test::singular_argument_boolean()};
   const test::Command command{
     {"/path/to/executable", "--output_directory", "/path/to/output", "--iterations", "200",
      "--help"}
@@ -3055,7 +3204,7 @@ TEST(Lector, ArityParseEnumeration) {
   static_assert(lector::parse_enumeration<lector::Arity>("Hello, world!") == std::nullopt);
   static_assert(lector::parse_enumeration<lector::Arity>("UnKnOwN") == std::nullopt);
   static_assert(lector::parse_enumeration<lector::Arity>("SiNgLe") == std::nullopt);
-  static_assert(lector::parse_enumeration<lector::Arity>("RePeAtEd") == std::nullopt);
+  static_assert(lector::parse_enumeration<lector::Arity>("RePeAtAbLe") == std::nullopt);
   {
     constexpr std::optional<lector::Arity> parsed{
       lector::parse_enumeration<lector::Arity>("UNKNOWN")};
@@ -3108,7 +3257,7 @@ TEST(Lector, ArityParseGeneral) {
   EXPECT_EQ(lector::parse<lector::Arity>("Hello, world!"), std::nullopt);
   EXPECT_EQ(lector::parse<lector::Arity>("UnKnOwN"), std::nullopt);
   EXPECT_EQ(lector::parse<lector::Arity>("SiNgLe"), std::nullopt);
-  EXPECT_EQ(lector::parse<lector::Arity>("RePeAtEd"), std::nullopt);
+  EXPECT_EQ(lector::parse<lector::Arity>("RePeAtAbLe"), std::nullopt);
   {
     const std::optional<lector::Arity> parsed{lector::parse<lector::Arity>("UNKNOWN")};
     EXPECT_TRUE(parsed.has_value() && parsed.value() == lector::Arity::Unknown);
@@ -3376,6 +3525,59 @@ TEST(Lector, ImportancePrintGeneral) {
   EXPECT_EQ(lector::print<lector::Importance>(lector::Importance::Required), "Required");
 }
 
+TEST(Lector, RepeatableArgumentBooleanDefault) {
+  const lector::RepeatableArgument<test::Label::Help, bool> argument;
+  EXPECT_EQ(argument.label(), test::Label::Help);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_TRUE(argument.description().empty());
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_TRUE(argument.keys_with_value_type().empty());
+  EXPECT_TRUE(argument.usage().empty());
+  EXPECT_TRUE(argument.options().empty());
+  EXPECT_TRUE(argument.execution().empty());
+}
+
+TEST(Lector, RepeatableArgumentBooleanNamed) {
+  lector::RepeatableArgument<test::Label::Help, bool> argument{test::repeatable_argument_boolean()};
+  EXPECT_EQ(argument.label(), test::Label::Help);
+  EXPECT_EQ(argument.keys(), test::keys_boolean());
+  EXPECT_EQ(argument.description(), "Display this help information and exit. Optional.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "-h, --help");
+  EXPECT_EQ(argument.usage(), "[--help]");
+  EXPECT_EQ(argument.options(), "-h, --help  Display this help information and exit. Optional.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(true);
+  argument.set_parsed_value(true);
+  EXPECT_EQ(argument.label(), test::Label::Help);
+  EXPECT_EQ(argument.keys(), test::keys_boolean());
+  EXPECT_EQ(argument.description(), "Display this help information and exit. Optional.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), true);
+  EXPECT_EQ(argument.parsed_values().at(1), true);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), true);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), true);
+  EXPECT_EQ(argument.keys_with_value_type(), "-h, --help");
+  EXPECT_EQ(argument.usage(), "[--help]");
+  EXPECT_EQ(argument.options(), "-h, --help  Display this help information and exit. Optional.");
+  EXPECT_EQ(argument.execution(), "--help --help");
+}
+
 TEST(Lector, RepeatableArgumentCopyAssignmentOperator) {
   const lector::RepeatableArgument<test::Label::Iterations, std::int32_t> first{
     test::repeatable_argument_integer_named_optional()};
@@ -3604,6 +3806,7 @@ TEST(Lector, RepeatableArgumentIntegerNamedOptional) {
   EXPECT_TRUE(argument.execution().empty());
   argument.set_parsed_value(test::ThreeHundred);
   argument.set_parsed_value(test::FourHundred);
+  EXPECT_EQ(argument.label(), test::Label::Iterations);
   EXPECT_EQ(argument.keys(), test::keys_integer());
   EXPECT_EQ(argument.description(), "Number of iterations.");
   EXPECT_EQ(argument.importance(), lector::Importance::Optional);
@@ -3739,6 +3942,52 @@ TEST(Lector, RepeatableArgumentIntegerPositionalRequired) {
   EXPECT_EQ(argument.usage(), "<number>");
   EXPECT_EQ(argument.options(), "<number>  Number of iterations.");
   EXPECT_EQ(argument.execution(), "300 400");
+}
+
+TEST(Lector, RepeatableArgumentInvalidAllEmptyKeys) {
+  EXPECT_ANY_THROW(test::repeatable_argument_invalid_all_empty_keys());
+}
+
+TEST(Lector, RepeatableArgumentInvalidAnEmptyKey) {
+  EXPECT_ANY_THROW(test::repeatable_argument_invalid_an_empty_key());
+}
+
+TEST(Lector, RepeatableArgumentInvalidBooleanParsedFalse) {
+  lector::RepeatableArgument<test::Label::Help, bool> argument{test::repeatable_argument_boolean()};
+  EXPECT_EQ(argument.label(), test::Label::Help);
+  EXPECT_EQ(argument.keys(), test::keys_boolean());
+  EXPECT_EQ(argument.description(), "Display this help information and exit. Optional.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "-h, --help");
+  EXPECT_EQ(argument.usage(), "[--help]");
+  EXPECT_EQ(argument.options(), "-h, --help  Display this help information and exit. Optional.");
+  EXPECT_TRUE(argument.execution().empty());
+  EXPECT_ANY_THROW(argument.set_parsed_value(false));
+}
+
+TEST(Lector, RepeatableArgumentInvalidBooleanPositional) {
+  EXPECT_ANY_THROW(test::repeatable_argument_invalid_boolean_positional());
+}
+
+TEST(Lector, RepeatableArgumentInvalidBooleanWithDefaultValues) {
+  EXPECT_ANY_THROW(test::repeatable_argument_invalid_boolean_with_default_values());
+}
+
+TEST(Lector, RepeatableArgumentInvalidDuplicateKeys) {
+  EXPECT_ANY_THROW(test::repeatable_argument_invalid_duplicate_keys());
+}
+
+TEST(Lector, RepeatableArgumentInvalidEmptyDescription) {
+  EXPECT_ANY_THROW(test::repeatable_argument_invalid_empty_description());
+}
+
+TEST(Lector, RepeatableArgumentInvalidNoKeys) {
+  EXPECT_ANY_THROW(test::repeatable_argument_invalid_no_keys());
 }
 
 TEST(Lector, RepeatableArgumentMoveAssignmentOperator) {
@@ -3929,8 +4178,7 @@ TEST(Lector, SingularArgumentBooleanDefault) {
 }
 
 TEST(Lector, SingularArgumentBooleanNamedOptional) {
-  lector::SingularArgument<test::Label::Help, bool> argument{
-    test::singular_argument_boolean_named()};
+  lector::SingularArgument<test::Label::Help, bool> argument{test::singular_argument_boolean()};
   EXPECT_EQ(argument.label(), test::Label::Help);
   EXPECT_EQ(argument.keys(), test::keys_boolean());
   EXPECT_EQ(argument.description(), "Display this help information and exit. Optional.");
@@ -4694,6 +4942,24 @@ TEST(Lector, SingularArgumentInvalidAllEmptyKeys) {
 
 TEST(Lector, SingularArgumentInvalidAnEmptyKey) {
   EXPECT_ANY_THROW(test::singular_argument_invalid_an_empty_key());
+}
+
+TEST(Lector, SingularArgumentInvalidBooleanParsedFalse) {
+  lector::SingularArgument<test::Label::Help, bool> argument{test::singular_argument_boolean()};
+  EXPECT_EQ(argument.label(), test::Label::Help);
+  EXPECT_EQ(argument.keys(), test::keys_boolean());
+  EXPECT_EQ(argument.description(), "Display this help information and exit. Optional.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(argument.default_value().has_value() && !argument.default_value().value());
+  EXPECT_EQ(argument.parsed_value(), std::nullopt);
+  EXPECT_FALSE(argument.parsed_or_default_value());
+  EXPECT_EQ(argument.keys_with_value_type(), "-h, --help");
+  EXPECT_EQ(argument.usage(), "[--help]");
+  EXPECT_EQ(argument.options(), "-h, --help  Display this help information and exit. Optional.");
+  EXPECT_TRUE(argument.execution().empty());
+  EXPECT_ANY_THROW(argument.set_parsed_value(false));
 }
 
 TEST(Lector, SingularArgumentInvalidBooleanPositional) {
