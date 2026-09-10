@@ -96,8 +96,14 @@ inline std::ostream& operator<<(std::ostream& output_stream, const test::Point& 
 /// @brief Default point in three-dimensional space.
 inline constexpr test::Point FirstPoint{1.0F, 2.0F, 3.0F};
 
-/// @brief Another point in three-dimensional space. Different from the default point.
+/// @brief Another point in three-dimensional space.
 inline constexpr test::Point SecondPoint{4.0F, 5.0F, 6.0F};
+
+/// @brief A third point in three-dimensional space.
+inline constexpr test::Point ThirdPoint{7.0F, 8.0F, 9.0F};
+
+/// @brief A fourth point in three-dimensional space.
+inline constexpr test::Point FourthPoint{10.0F, 11.0F, 12.0F};
 
 }  // namespace
 
@@ -164,6 +170,12 @@ constexpr std::int32_t ThreeHundred{300};
 /// @brief The number 400.
 constexpr std::int32_t FourHundred{400};
 
+/// @brief The fraction 1/8.
+constexpr double OneOverEight{0.125};
+
+/// @brief The fraction 1/16.
+constexpr double OneOverSixteen{0.0625};
+
 /// @brief The fraction 1/32.
 constexpr double OneOverThirtyTwo{0.03125};
 
@@ -184,6 +196,20 @@ lector::Configuration configuration() {
 /// @return Simple keys for a boolean command line argument.
 std::vector<std::string> keys_boolean() {
   return std::vector<std::string>{"-h", "--help"};
+}
+
+/// @brief Helper function that creates simple keys for a command line argument with long confusing
+/// keys.
+/// @return Simple keys for a command line argument with long confusing keys.
+std::vector<std::string> keys_confusing_long() {
+  return std::vector<std::string>{"--key=200"};
+}
+
+/// @brief Helper function that creates simple keys for a command line argument with short confusing
+/// keys.
+/// @return Simple keys for a command line argument with short confusing keys.
+std::vector<std::string> keys_confusing_short() {
+  return std::vector<std::string>{"--key"};
 }
 
 /// @brief Helper function that creates simple keys for a data structure command line argument.
@@ -249,6 +275,188 @@ std::vector<std::string> keys_weird() {
 lector::RepeatableArgument<test::Label::Help, bool> repeatable_argument_boolean() {
   return lector::RepeatableArgument<test::Label::Help, bool>{
     test::keys_boolean(), "Display this help information and exit. Optional."};
+}
+
+/// @brief Helper function that creates a repeatable named optional command line argument with a
+/// long confusing key.
+/// @return The repeatable named optional command line argument with a long confusing key.
+lector::RepeatableArgument<test::Label::ConfusingLong, std::int32_t>
+repeatable_argument_confusing_long() {
+  return lector::RepeatableArgument<test::Label::ConfusingLong, std::int32_t>{
+    test::keys_confusing_long(), "Long confusing argument.",
+    std::vector<std::int32_t>{test::OneHundred, test::TwoHundred}
+  };
+}
+
+/// @brief Helper function that creates a repeatable named optional command line argument with a
+/// short confusing key.
+/// @return The repeatable named optional command line argument with a short confusing key.
+lector::RepeatableArgument<test::Label::ConfusingShort, std::int32_t>
+repeatable_argument_confusing_short() {
+  return lector::RepeatableArgument<test::Label::ConfusingShort, std::int32_t>{
+    test::keys_confusing_short(), "Short confusing argument.",
+    std::vector<std::int32_t>{test::OneHundred, test::TwoHundred}
+  };
+}
+
+/// @brief Helper function that creates a repeatable named optional data structure command line
+/// argument.
+/// @return The repeatable named optional data structure command line argument.
+lector::RepeatableArgument<test::Label::Point, test::Point>
+repeatable_argument_data_structure_named_optional() {
+  return lector::RepeatableArgument<test::Label::Point, test::Point>{
+    test::keys_data_structure(), "Starting point.",
+    std::vector<test::Point>{test::FirstPoint, test::SecondPoint}
+  };
+}
+
+/// @brief Helper function that creates a repeatable named required data structure command line
+/// argument.
+/// @return The repeatable named required data structure command line argument.
+lector::RepeatableArgument<test::Label::Point, test::Point>
+repeatable_argument_data_structure_named_required() {
+  return lector::RepeatableArgument<test::Label::Point, test::Point>{
+    test::keys_data_structure(), "Starting point."};
+}
+
+/// @brief Helper function that creates a repeatable positional optional data structure command line
+/// argument.
+/// @return The repeatable positional optional data structure command line argument.
+lector::RepeatableArgument<test::Label::Point, test::Point>
+repeatable_argument_data_structure_positional_optional() {
+  return lector::RepeatableArgument<test::Label::Point, test::Point>{
+    "Starting point.", std::vector<test::Point>{test::FirstPoint, test::SecondPoint}
+  };
+}
+
+/// @brief Helper function that creates a repeatable positional required data structure command line
+/// argument.
+/// @return The repeatable positional required data structure command line argument.
+lector::RepeatableArgument<test::Label::Point, test::Point>
+repeatable_argument_data_structure_positional_required() {
+  return lector::RepeatableArgument<test::Label::Point, test::Point>{"Starting point."};
+}
+
+/// @brief Helper function that creates a repeatable named optional enumeration command line
+/// argument.
+/// @return The repeatable named optional enumeration command line argument.
+lector::RepeatableArgument<test::Label::Shape, test::Shape>
+repeatable_argument_enumeration_named_optional() {
+  return lector::RepeatableArgument<test::Label::Shape, test::Shape>{
+    test::keys_enumeration(), "Favorite shape.",
+    std::vector<test::Shape>{test::Shape::Circle, test::Shape::Triangle}
+  };
+}
+
+/// @brief Helper function that creates a repeatable named required enumeration command line
+/// argument.
+/// @return The repeatable named required enumeration command line argument.
+lector::RepeatableArgument<test::Label::Shape, test::Shape>
+repeatable_argument_enumeration_named_required() {
+  return lector::RepeatableArgument<test::Label::Shape, test::Shape>{
+    test::keys_enumeration(), "Favorite shape."};
+}
+
+/// @brief Helper function that creates a repeatable positional optional enumeration command line
+/// argument.
+/// @return The repeatable positional optional enumeration command line argument.
+lector::RepeatableArgument<test::Label::Shape, test::Shape>
+repeatable_argument_enumeration_positional_optional() {
+  return lector::RepeatableArgument<test::Label::Shape, test::Shape>{
+    "Favorite shape.", std::vector<test::Shape>{test::Shape::Circle, test::Shape::Triangle}
+  };
+}
+
+/// @brief Helper function that creates a repeatable positional required enumeration command line
+/// argument.
+/// @return The repeatable positional required enumeration command line argument.
+lector::RepeatableArgument<test::Label::Shape, test::Shape>
+repeatable_argument_enumeration_positional_required() {
+  return lector::RepeatableArgument<test::Label::Shape, test::Shape>{"Favorite shape."};
+}
+
+/// @brief Helper function that creates a repeatable named optional filesystem path command line
+/// argument.
+/// @return The repeatable named optional filesystem path command line argument.
+lector::RepeatableArgument<test::Label::OutputDirectory, std::filesystem::path>
+repeatable_argument_filesystem_path_named_optional() {
+  return lector::RepeatableArgument<test::Label::OutputDirectory, std::filesystem::path>{
+    test::keys_filesystem_path(), "Output directory.",
+    std::vector<std::filesystem::path>{
+                                       std::filesystem::path{"/first/path"},
+                                       std::filesystem::path{"/second/path"},
+                                       }
+  };
+}
+
+/// @brief Helper function that creates a repeatable named required filesystem path command line
+/// argument.
+/// @return The repeatable named required filesystem path command line argument.
+lector::RepeatableArgument<test::Label::OutputDirectory, std::filesystem::path>
+repeatable_argument_filesystem_path_named_required() {
+  return lector::RepeatableArgument<test::Label::OutputDirectory, std::filesystem::path>{
+    test::keys_filesystem_path(), "Output directory."};
+}
+
+/// @brief Helper function that creates a repeatable positional optional filesystem path command
+/// line argument.
+/// @return The repeatable positional optional filesystem path command line argument.
+lector::RepeatableArgument<test::Label::OutputDirectory, std::filesystem::path>
+repeatable_argument_filesystem_path_positional_optional() {
+  return lector::RepeatableArgument<test::Label::OutputDirectory, std::filesystem::path>{
+    "Output directory.",
+    std::vector<std::filesystem::path>{
+                                       std::filesystem::path{"/first/path"},
+                                       std::filesystem::path{"/second/path"},
+                                       }
+  };
+}
+
+/// @brief Helper function that creates a repeatable positional required filesystem path command
+/// line argument.
+/// @return The repeatable positional required filesystem path command line argument.
+lector::RepeatableArgument<test::Label::OutputDirectory, std::filesystem::path>
+repeatable_argument_filesystem_path_positional_required() {
+  return lector::RepeatableArgument<test::Label::OutputDirectory, std::filesystem::path>{
+    "Output directory."};
+}
+
+/// @brief Helper function that creates a repeatable named optional floating-point number command
+/// line argument.
+/// @return The repeatable named optional floating-point number command line argument.
+lector::RepeatableArgument<test::Label::Tolerance, double>
+repeatable_argument_floating_point_number_named_optional() {
+  return lector::RepeatableArgument<test::Label::Tolerance, double>{
+    test::keys_floating_point_number(), "Tolerance value.",
+    std::vector<double>{test::OneOverThirtyTwo, test::OneOverSixtyFour}
+  };
+}
+
+/// @brief Helper function that creates a repeatable named required floating-point number command
+/// line argument.
+/// @return The repeatable named required floating-point number command line argument.
+lector::RepeatableArgument<test::Label::Tolerance, double>
+repeatable_argument_floating_point_number_named_required() {
+  return lector::RepeatableArgument<test::Label::Tolerance, double>{
+    test::keys_floating_point_number(), "Tolerance value."};
+}
+
+/// @brief Helper function that creates a repeatable positional optional floating-point number
+/// command line argument.
+/// @return The repeatable positional optional floating-point number command line argument.
+lector::RepeatableArgument<test::Label::Tolerance, double>
+repeatable_argument_floating_point_number_positional_optional() {
+  return lector::RepeatableArgument<test::Label::Tolerance, double>{
+    "Tolerance value.", std::vector<double>{test::OneOverThirtyTwo, test::OneOverSixtyFour}
+  };
+}
+
+/// @brief Helper function that creates a repeatable positional required floating-point number
+/// command line argument.
+/// @return The repeatable positional required floating-point number command line argument.
+lector::RepeatableArgument<test::Label::Tolerance, double>
+repeatable_argument_floating_point_number_positional_required() {
+  return lector::RepeatableArgument<test::Label::Tolerance, double>{"Tolerance value."};
 }
 
 /// @brief Helper function that creates a repeatable named optional integer command line argument.
@@ -413,7 +621,7 @@ lector::SingularArgument<test::Label::Help, bool> singular_argument_boolean() {
 lector::SingularArgument<test::Label::ConfusingLong, std::int32_t>
 singular_argument_confusing_long() {
   return lector::SingularArgument<test::Label::ConfusingLong, std::int32_t>{
-    std::vector<std::string>{"--key=200"}, "Long confusing argument.", test::OneHundred};
+    test::keys_confusing_long(), "Long confusing argument.", test::OneHundred};
 }
 
 /// @brief Helper function that creates a singular named optional command line argument with a short
@@ -422,7 +630,7 @@ singular_argument_confusing_long() {
 lector::SingularArgument<test::Label::ConfusingShort, std::int32_t>
 singular_argument_confusing_short() {
   return lector::SingularArgument<test::Label::ConfusingShort, std::int32_t>{
-    std::vector<std::string>{"--key"}, "Short confusing argument.", test::OneHundred};
+    test::keys_confusing_short(), "Short confusing argument.", test::OneHundred};
 }
 
 /// @brief Helper function that creates a singular named optional data structure command line
@@ -499,7 +707,7 @@ singular_argument_enumeration_positional_required() {
 lector::SingularArgument<test::Label::OutputDirectory, std::filesystem::path>
 singular_argument_filesystem_path_named_optional() {
   return lector::SingularArgument<test::Label::OutputDirectory, std::filesystem::path>{
-    test::keys_filesystem_path(), "Output directory.", std::filesystem::path("/some/path")};
+    test::keys_filesystem_path(), "Output directory.", std::filesystem::path{"/some/path"}};
 }
 
 /// @brief Helper function that creates a singular named required filesystem path command line
@@ -517,7 +725,7 @@ singular_argument_filesystem_path_named_required() {
 lector::SingularArgument<test::Label::OutputDirectory, std::filesystem::path>
 singular_argument_filesystem_path_positional_optional() {
   return lector::SingularArgument<test::Label::OutputDirectory, std::filesystem::path>{
-    "Output directory.", std::filesystem::path("/some/path")};
+    "Output directory.", std::filesystem::path{"/some/path"}};
 }
 
 /// @brief Helper function that creates a singular positional required filesystem path command line
@@ -3799,6 +4007,842 @@ TEST(Lector, RepeatableArgumentCopyConstructor) {
   EXPECT_EQ(second.execution(), "--iterations 300 --iterations 400");
 }
 
+TEST(Lector, RepeatableArgumentConfusingLongDefault) {
+  lector::RepeatableArgument<test::Label::ConfusingLong, std::int32_t> argument;
+  EXPECT_EQ(argument.label(), test::Label::ConfusingLong);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_TRUE(argument.description().empty());
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "<number>");
+  EXPECT_EQ(argument.usage(), "<number>");
+  EXPECT_EQ(argument.options(), "<number>");
+  EXPECT_TRUE(argument.execution().empty());
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::OneHundred));
+}
+
+TEST(Lector, RepeatableArgumentConfusingLongMain) {
+  lector::RepeatableArgument<test::Label::ConfusingLong, std::int32_t> argument{
+    test::repeatable_argument_confusing_long()};
+  EXPECT_EQ(argument.label(), test::Label::ConfusingLong);
+  EXPECT_EQ(argument.keys(), test::keys_confusing_long());
+  EXPECT_EQ(argument.description(), "Long confusing argument.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::OneHundred);
+  EXPECT_EQ(argument.default_values().at(1), test::TwoHundred);
+  EXPECT_TRUE(argument.parsed_values().empty());
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::OneHundred);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::TwoHundred);
+  EXPECT_EQ(argument.keys_with_value_type(), "--key=200 <number>");
+  EXPECT_EQ(argument.usage(), "[--key=200 <number>]");
+  EXPECT_EQ(argument.options(), "--key=200 <number>  Long confusing argument.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::ThreeHundred);
+  argument.set_parsed_value(test::FourHundred);
+  EXPECT_EQ(argument.label(), test::Label::ConfusingLong);
+  EXPECT_EQ(argument.keys(), test::keys_confusing_long());
+  EXPECT_EQ(argument.description(), "Long confusing argument.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::OneHundred);
+  EXPECT_EQ(argument.default_values().at(1), test::TwoHundred);
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::ThreeHundred);
+  EXPECT_EQ(argument.parsed_values().at(1), test::FourHundred);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::ThreeHundred);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::FourHundred);
+  EXPECT_EQ(argument.keys_with_value_type(), "--key=200 <number>");
+  EXPECT_EQ(argument.usage(), "[--key=200 <number>]");
+  EXPECT_EQ(argument.options(), "--key=200 <number>  Long confusing argument.");
+  EXPECT_EQ(argument.execution(), "--key=200 300 --key=200 400");
+}
+
+TEST(Lector, RepeatableArgumentConfusingShortDefault) {
+  lector::RepeatableArgument<test::Label::ConfusingShort, std::int32_t> argument;
+  EXPECT_EQ(argument.label(), test::Label::ConfusingShort);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_TRUE(argument.description().empty());
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "<number>");
+  EXPECT_EQ(argument.usage(), "<number>");
+  EXPECT_EQ(argument.options(), "<number>");
+  EXPECT_TRUE(argument.execution().empty());
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::OneHundred));
+}
+
+TEST(Lector, RepeatableArgumentConfusingShortMain) {
+  lector::RepeatableArgument<test::Label::ConfusingShort, std::int32_t> argument{
+    test::repeatable_argument_confusing_short()};
+  EXPECT_EQ(argument.label(), test::Label::ConfusingShort);
+  EXPECT_EQ(argument.keys(), test::keys_confusing_short());
+  EXPECT_EQ(argument.description(), "Short confusing argument.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::OneHundred);
+  EXPECT_EQ(argument.default_values().at(1), test::TwoHundred);
+  EXPECT_TRUE(argument.parsed_values().empty());
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::OneHundred);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::TwoHundred);
+  EXPECT_EQ(argument.keys_with_value_type(), "--key <number>");
+  EXPECT_EQ(argument.usage(), "[--key <number>]");
+  EXPECT_EQ(argument.options(), "--key <number>  Short confusing argument.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::ThreeHundred);
+  argument.set_parsed_value(test::FourHundred);
+  EXPECT_EQ(argument.label(), test::Label::ConfusingShort);
+  EXPECT_EQ(argument.keys(), test::keys_confusing_short());
+  EXPECT_EQ(argument.description(), "Short confusing argument.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::OneHundred);
+  EXPECT_EQ(argument.default_values().at(1), test::TwoHundred);
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::ThreeHundred);
+  EXPECT_EQ(argument.parsed_values().at(1), test::FourHundred);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::ThreeHundred);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::FourHundred);
+  EXPECT_EQ(argument.keys_with_value_type(), "--key <number>");
+  EXPECT_EQ(argument.usage(), "[--key <number>]");
+  EXPECT_EQ(argument.options(), "--key <number>  Short confusing argument.");
+  EXPECT_EQ(argument.execution(), "--key 300 --key 400");
+}
+
+TEST(Lector, RepeatableArgumentDataStructureDefault) {
+  lector::RepeatableArgument<test::Label::Point, test::Point> argument;
+  EXPECT_EQ(argument.label(), test::Label::Point);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_TRUE(argument.description().empty());
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "<value>");
+  EXPECT_EQ(argument.options(), "<value>");
+  EXPECT_TRUE(argument.execution().empty());
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::FirstPoint));
+}
+
+TEST(Lector, RepeatableArgumentDataStructureNamedOptional) {
+  lector::RepeatableArgument<test::Label::Point, test::Point> argument{
+    test::repeatable_argument_data_structure_named_optional()};
+  EXPECT_EQ(argument.label(), test::Label::Point);
+  EXPECT_EQ(argument.keys(), test::keys_data_structure());
+  EXPECT_EQ(argument.description(), "Starting point.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::FirstPoint);
+  EXPECT_EQ(argument.default_values().at(1), test::SecondPoint);
+  EXPECT_TRUE(argument.parsed_values().empty());
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::FirstPoint);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::SecondPoint);
+  EXPECT_EQ(argument.keys_with_value_type(), "-p <value>, --point <value>");
+  EXPECT_EQ(argument.usage(), "[--point <value>]");
+  EXPECT_EQ(argument.options(), "-p <value>, --point <value>  Starting point.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::ThirdPoint);
+  argument.set_parsed_value(test::FourthPoint);
+  EXPECT_EQ(argument.label(), test::Label::Point);
+  EXPECT_EQ(argument.keys(), test::keys_data_structure());
+  EXPECT_EQ(argument.description(), "Starting point.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::FirstPoint);
+  EXPECT_EQ(argument.default_values().at(1), test::SecondPoint);
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::ThirdPoint);
+  EXPECT_EQ(argument.parsed_values().at(1), test::FourthPoint);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::ThirdPoint);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::FourthPoint);
+  EXPECT_EQ(argument.keys_with_value_type(), "-p <value>, --point <value>");
+  EXPECT_EQ(argument.usage(), "[--point <value>]");
+  EXPECT_EQ(argument.options(), "-p <value>, --point <value>  Starting point.");
+  EXPECT_EQ(argument.execution(), "--point \"7 8 9\" --point \"10 11 12\"");
+}
+
+TEST(Lector, RepeatableArgumentDataStructureNamedRequired) {
+  lector::RepeatableArgument<test::Label::Point, test::Point> argument{
+    test::repeatable_argument_data_structure_named_required()};
+  EXPECT_EQ(argument.label(), test::Label::Point);
+  EXPECT_EQ(argument.keys(), test::keys_data_structure());
+  EXPECT_EQ(argument.description(), "Starting point.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "-p <value>, --point <value>");
+  EXPECT_EQ(argument.usage(), "--point <value>");
+  EXPECT_EQ(argument.options(), "-p <value>, --point <value>  Starting point.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::ThirdPoint);
+  argument.set_parsed_value(test::FourthPoint);
+  EXPECT_EQ(argument.label(), test::Label::Point);
+  EXPECT_EQ(argument.keys(), test::keys_data_structure());
+  EXPECT_EQ(argument.description(), "Starting point.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::ThirdPoint);
+  EXPECT_EQ(argument.parsed_values().at(1), test::FourthPoint);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::ThirdPoint);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::FourthPoint);
+  EXPECT_EQ(argument.keys_with_value_type(), "-p <value>, --point <value>");
+  EXPECT_EQ(argument.usage(), "--point <value>");
+  EXPECT_EQ(argument.options(), "-p <value>, --point <value>  Starting point.");
+  EXPECT_EQ(argument.execution(), "--point \"7 8 9\" --point \"10 11 12\"");
+}
+
+TEST(Lector, RepeatableArgumentDataStructurePositionalOptional) {
+  lector::RepeatableArgument<test::Label::Point, test::Point> argument{
+    test::repeatable_argument_data_structure_positional_optional()};
+  EXPECT_EQ(argument.label(), test::Label::Point);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Starting point.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::FirstPoint);
+  EXPECT_EQ(argument.default_values().at(1), test::SecondPoint);
+  EXPECT_TRUE(argument.parsed_values().empty());
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::FirstPoint);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::SecondPoint);
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "[<value>]");
+  EXPECT_EQ(argument.options(), "<value>  Starting point.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::ThirdPoint);
+  argument.set_parsed_value(test::FourthPoint);
+  EXPECT_EQ(argument.label(), test::Label::Point);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Starting point.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::FirstPoint);
+  EXPECT_EQ(argument.default_values().at(1), test::SecondPoint);
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::ThirdPoint);
+  EXPECT_EQ(argument.parsed_values().at(1), test::FourthPoint);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::ThirdPoint);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::FourthPoint);
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "[<value>]");
+  EXPECT_EQ(argument.options(), "<value>  Starting point.");
+  EXPECT_EQ(argument.execution(), "\"7 8 9\" \"10 11 12\"");
+}
+
+TEST(Lector, RepeatableArgumentDataStructurePositionalRequired) {
+  lector::RepeatableArgument<test::Label::Point, test::Point> argument{
+    test::repeatable_argument_data_structure_positional_required()};
+  EXPECT_EQ(argument.label(), test::Label::Point);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Starting point.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "<value>");
+  EXPECT_EQ(argument.options(), "<value>  Starting point.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::ThirdPoint);
+  argument.set_parsed_value(test::FourthPoint);
+  EXPECT_EQ(argument.label(), test::Label::Point);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Starting point.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::ThirdPoint);
+  EXPECT_EQ(argument.parsed_values().at(1), test::FourthPoint);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::ThirdPoint);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::FourthPoint);
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "<value>");
+  EXPECT_EQ(argument.options(), "<value>  Starting point.");
+  EXPECT_EQ(argument.execution(), "\"7 8 9\" \"10 11 12\"");
+}
+
+TEST(Lector, RepeatableArgumentEnumerationDefault) {
+  lector::RepeatableArgument<test::Label::Shape, test::Shape> argument;
+  EXPECT_EQ(argument.label(), test::Label::Shape);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_TRUE(argument.description().empty());
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "<value>");
+  EXPECT_EQ(argument.options(), "<value>");
+  EXPECT_TRUE(argument.execution().empty());
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::Shape::Square));
+}
+
+TEST(Lector, RepeatableArgumentEnumerationNamedOptional) {
+  lector::RepeatableArgument<test::Label::Shape, test::Shape> argument{
+    test::repeatable_argument_enumeration_named_optional()};
+  EXPECT_EQ(argument.label(), test::Label::Shape);
+  EXPECT_EQ(argument.keys(), test::keys_enumeration());
+  EXPECT_EQ(argument.description(), "Favorite shape.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::Shape::Circle);
+  EXPECT_EQ(argument.default_values().at(1), test::Shape::Triangle);
+  EXPECT_TRUE(argument.parsed_values().empty());
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::Shape::Circle);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::Shape::Triangle);
+  EXPECT_EQ(argument.keys_with_value_type(), "-s <value>, --shape <value>");
+  EXPECT_EQ(argument.usage(), "[--shape <value>]");
+  EXPECT_EQ(argument.options(), "-s <value>, --shape <value>  Favorite shape.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::Shape::Square);
+  argument.set_parsed_value(test::Shape::Circle);
+  EXPECT_EQ(argument.label(), test::Label::Shape);
+  EXPECT_EQ(argument.keys(), test::keys_enumeration());
+  EXPECT_EQ(argument.description(), "Favorite shape.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::Shape::Circle);
+  EXPECT_EQ(argument.default_values().at(1), test::Shape::Triangle);
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::Shape::Square);
+  EXPECT_EQ(argument.parsed_values().at(1), test::Shape::Circle);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::Shape::Square);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::Shape::Circle);
+  EXPECT_EQ(argument.keys_with_value_type(), "-s <value>, --shape <value>");
+  EXPECT_EQ(argument.usage(), "[--shape <value>]");
+  EXPECT_EQ(argument.options(), "-s <value>, --shape <value>  Favorite shape.");
+  EXPECT_EQ(argument.execution(), "--shape Square --shape Circle");
+}
+
+TEST(Lector, RepeatableArgumentEnumerationNamedRequired) {
+  lector::RepeatableArgument<test::Label::Shape, test::Shape> argument{
+    test::repeatable_argument_enumeration_named_required()};
+  EXPECT_EQ(argument.label(), test::Label::Shape);
+  EXPECT_EQ(argument.keys(), test::keys_enumeration());
+  EXPECT_EQ(argument.description(), "Favorite shape.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "-s <value>, --shape <value>");
+  EXPECT_EQ(argument.usage(), "--shape <value>");
+  EXPECT_EQ(argument.options(), "-s <value>, --shape <value>  Favorite shape.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::Shape::Square);
+  argument.set_parsed_value(test::Shape::Circle);
+  EXPECT_EQ(argument.label(), test::Label::Shape);
+  EXPECT_EQ(argument.keys(), test::keys_enumeration());
+  EXPECT_EQ(argument.description(), "Favorite shape.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::Shape::Square);
+  EXPECT_EQ(argument.parsed_values().at(1), test::Shape::Circle);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::Shape::Square);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::Shape::Circle);
+  EXPECT_EQ(argument.keys_with_value_type(), "-s <value>, --shape <value>");
+  EXPECT_EQ(argument.usage(), "--shape <value>");
+  EXPECT_EQ(argument.options(), "-s <value>, --shape <value>  Favorite shape.");
+  EXPECT_EQ(argument.execution(), "--shape Square --shape Circle");
+}
+
+TEST(Lector, RepeatableArgumentEnumerationPositionalOptional) {
+  lector::RepeatableArgument<test::Label::Shape, test::Shape> argument{
+    test::repeatable_argument_enumeration_positional_optional()};
+  EXPECT_EQ(argument.label(), test::Label::Shape);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Favorite shape.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::Shape::Circle);
+  EXPECT_EQ(argument.default_values().at(1), test::Shape::Triangle);
+  EXPECT_TRUE(argument.parsed_values().empty());
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::Shape::Circle);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::Shape::Triangle);
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "[<value>]");
+  EXPECT_EQ(argument.options(), "<value>  Favorite shape.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::Shape::Square);
+  argument.set_parsed_value(test::Shape::Circle);
+  EXPECT_EQ(argument.label(), test::Label::Shape);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Favorite shape.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::Shape::Circle);
+  EXPECT_EQ(argument.default_values().at(1), test::Shape::Triangle);
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::Shape::Square);
+  EXPECT_EQ(argument.parsed_values().at(1), test::Shape::Circle);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::Shape::Square);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::Shape::Circle);
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "[<value>]");
+  EXPECT_EQ(argument.options(), "<value>  Favorite shape.");
+  EXPECT_EQ(argument.execution(), "Square Circle");
+}
+
+TEST(Lector, RepeatableArgumentEnumerationPositionalRequired) {
+  lector::RepeatableArgument<test::Label::Shape, test::Shape> argument{
+    test::repeatable_argument_enumeration_positional_required()};
+  EXPECT_EQ(argument.label(), test::Label::Shape);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Favorite shape.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "<value>");
+  EXPECT_EQ(argument.options(), "<value>  Favorite shape.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::Shape::Square);
+  argument.set_parsed_value(test::Shape::Circle);
+  EXPECT_EQ(argument.label(), test::Label::Shape);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Favorite shape.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::Shape::Square);
+  EXPECT_EQ(argument.parsed_values().at(1), test::Shape::Circle);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::Shape::Square);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::Shape::Circle);
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "<value>");
+  EXPECT_EQ(argument.options(), "<value>  Favorite shape.");
+  EXPECT_EQ(argument.execution(), "Square Circle");
+}
+
+TEST(Lector, RepeatableArgumentFilesystemPathDefault) {
+  lector::RepeatableArgument<test::Label::OutputDirectory, std::filesystem::path> argument;
+  EXPECT_EQ(argument.label(), test::Label::OutputDirectory);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_TRUE(argument.description().empty());
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "<path>");
+  EXPECT_EQ(argument.usage(), "<path>");
+  EXPECT_EQ(argument.options(), "<path>");
+  EXPECT_TRUE(argument.execution().empty());
+  EXPECT_ANY_THROW(argument.set_parsed_value(std::filesystem::path{"/some/path"}));
+}
+
+TEST(Lector, RepeatableArgumentFilesystemPathNamedOptional) {
+  lector::RepeatableArgument<test::Label::OutputDirectory, std::filesystem::path> argument{
+    test::repeatable_argument_filesystem_path_named_optional()};
+  EXPECT_EQ(argument.label(), test::Label::OutputDirectory);
+  EXPECT_EQ(argument.keys(), test::keys_filesystem_path());
+  EXPECT_EQ(argument.description(), "Output directory.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), std::filesystem::path{"/first/path"});
+  EXPECT_EQ(argument.default_values().at(1), std::filesystem::path{"/second/path"});
+  EXPECT_TRUE(argument.parsed_values().empty());
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), std::filesystem::path{"/first/path"});
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), std::filesystem::path{"/second/path"});
+  EXPECT_EQ(argument.keys_with_value_type(), "-o <path>, --output_directory <path>");
+  EXPECT_EQ(argument.usage(), "[--output_directory <path>]");
+  EXPECT_EQ(argument.options(), "-o <path>, --output_directory <path>  Output directory.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(std::filesystem::path{"/third/path"});
+  argument.set_parsed_value(std::filesystem::path{"/fourth/path"});
+  EXPECT_EQ(argument.label(), test::Label::OutputDirectory);
+  EXPECT_EQ(argument.keys(), test::keys_filesystem_path());
+  EXPECT_EQ(argument.description(), "Output directory.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), std::filesystem::path{"/first/path"});
+  EXPECT_EQ(argument.default_values().at(1), std::filesystem::path{"/second/path"});
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), std::filesystem::path{"/third/path"});
+  EXPECT_EQ(argument.parsed_values().at(1), std::filesystem::path{"/fourth/path"});
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), std::filesystem::path{"/third/path"});
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), std::filesystem::path{"/fourth/path"});
+  EXPECT_EQ(argument.keys_with_value_type(), "-o <path>, --output_directory <path>");
+  EXPECT_EQ(argument.usage(), "[--output_directory <path>]");
+  EXPECT_EQ(argument.options(), "-o <path>, --output_directory <path>  Output directory.");
+  EXPECT_EQ(argument.execution(), "--output_directory /third/path --output_directory /fourth/path");
+}
+
+TEST(Lector, RepeatableArgumentFilesystemPathNamedRequired) {
+  lector::RepeatableArgument<test::Label::OutputDirectory, std::filesystem::path> argument{
+    test::repeatable_argument_filesystem_path_named_required()};
+  EXPECT_EQ(argument.label(), test::Label::OutputDirectory);
+  EXPECT_EQ(argument.keys(), test::keys_filesystem_path());
+  EXPECT_EQ(argument.description(), "Output directory.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "-o <path>, --output_directory <path>");
+  EXPECT_EQ(argument.usage(), "--output_directory <path>");
+  EXPECT_EQ(argument.options(), "-o <path>, --output_directory <path>  Output directory.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(std::filesystem::path{"/third/path"});
+  argument.set_parsed_value(std::filesystem::path{"/fourth/path"});
+  EXPECT_EQ(argument.label(), test::Label::OutputDirectory);
+  EXPECT_EQ(argument.keys(), test::keys_filesystem_path());
+  EXPECT_EQ(argument.description(), "Output directory.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), std::filesystem::path{"/third/path"});
+  EXPECT_EQ(argument.parsed_values().at(1), std::filesystem::path{"/fourth/path"});
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), std::filesystem::path{"/third/path"});
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), std::filesystem::path{"/fourth/path"});
+  EXPECT_EQ(argument.keys_with_value_type(), "-o <path>, --output_directory <path>");
+  EXPECT_EQ(argument.usage(), "--output_directory <path>");
+  EXPECT_EQ(argument.options(), "-o <path>, --output_directory <path>  Output directory.");
+  EXPECT_EQ(argument.execution(), "--output_directory /third/path --output_directory /fourth/path");
+}
+
+TEST(Lector, RepeatableArgumentFilesystemPathPositionalOptional) {
+  lector::RepeatableArgument<test::Label::OutputDirectory, std::filesystem::path> argument{
+    test::repeatable_argument_filesystem_path_positional_optional()};
+  EXPECT_EQ(argument.label(), test::Label::OutputDirectory);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Output directory.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), std::filesystem::path{"/first/path"});
+  EXPECT_EQ(argument.default_values().at(1), std::filesystem::path{"/second/path"});
+  EXPECT_TRUE(argument.parsed_values().empty());
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), std::filesystem::path{"/first/path"});
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), std::filesystem::path{"/second/path"});
+  EXPECT_EQ(argument.keys_with_value_type(), "<path>");
+  EXPECT_EQ(argument.usage(), "[<path>]");
+  EXPECT_EQ(argument.options(), "<path>  Output directory.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(std::filesystem::path{"/third/path"});
+  argument.set_parsed_value(std::filesystem::path{"/fourth/path"});
+  EXPECT_EQ(argument.label(), test::Label::OutputDirectory);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Output directory.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), std::filesystem::path{"/first/path"});
+  EXPECT_EQ(argument.default_values().at(1), std::filesystem::path{"/second/path"});
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), std::filesystem::path{"/third/path"});
+  EXPECT_EQ(argument.parsed_values().at(1), std::filesystem::path{"/fourth/path"});
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), std::filesystem::path{"/third/path"});
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), std::filesystem::path{"/fourth/path"});
+  EXPECT_EQ(argument.keys_with_value_type(), "<path>");
+  EXPECT_EQ(argument.usage(), "[<path>]");
+  EXPECT_EQ(argument.options(), "<path>  Output directory.");
+  EXPECT_EQ(argument.execution(), "/third/path /fourth/path");
+}
+
+TEST(Lector, RepeatableArgumentFilesystemPathPositionalRequired) {
+  lector::RepeatableArgument<test::Label::OutputDirectory, std::filesystem::path> argument{
+    test::repeatable_argument_filesystem_path_positional_required()};
+  EXPECT_EQ(argument.label(), test::Label::OutputDirectory);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Output directory.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "<path>");
+  EXPECT_EQ(argument.usage(), "<path>");
+  EXPECT_EQ(argument.options(), "<path>  Output directory.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(std::filesystem::path{"/third/path"});
+  argument.set_parsed_value(std::filesystem::path{"/fourth/path"});
+  EXPECT_EQ(argument.label(), test::Label::OutputDirectory);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Output directory.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), std::filesystem::path{"/third/path"});
+  EXPECT_EQ(argument.parsed_values().at(1), std::filesystem::path{"/fourth/path"});
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), std::filesystem::path{"/third/path"});
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), std::filesystem::path{"/fourth/path"});
+  EXPECT_EQ(argument.keys_with_value_type(), "<path>");
+  EXPECT_EQ(argument.usage(), "<path>");
+  EXPECT_EQ(argument.options(), "<path>  Output directory.");
+  EXPECT_EQ(argument.execution(), "/third/path /fourth/path");
+}
+
+TEST(Lector, RepeatableArgumentFloatingPointNumberDefault) {
+  lector::RepeatableArgument<test::Label::Tolerance, double> argument;
+  EXPECT_EQ(argument.label(), test::Label::Tolerance);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_TRUE(argument.description().empty());
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "<value>");
+  EXPECT_EQ(argument.options(), "<value>");
+  EXPECT_TRUE(argument.execution().empty());
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::OneOverSixteen));
+}
+
+TEST(Lector, RepeatableArgumentFloatingPointNumberNamedOptional) {
+  lector::RepeatableArgument<test::Label::Tolerance, double> argument{
+    test::repeatable_argument_floating_point_number_named_optional()};
+  EXPECT_EQ(argument.label(), test::Label::Tolerance);
+  EXPECT_EQ(argument.keys(), test::keys_floating_point_number());
+  EXPECT_EQ(argument.description(), "Tolerance value.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::OneOverThirtyTwo);
+  EXPECT_EQ(argument.default_values().at(1), test::OneOverSixtyFour);
+  EXPECT_TRUE(argument.parsed_values().empty());
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::OneOverThirtyTwo);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::OneOverSixtyFour);
+  EXPECT_EQ(argument.keys_with_value_type(), "-t <value>, --tolerance <value>");
+  EXPECT_EQ(argument.usage(), "[--tolerance <value>]");
+  EXPECT_EQ(argument.options(), "-t <value>, --tolerance <value>  Tolerance value.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::OneOverEight);
+  argument.set_parsed_value(test::OneOverSixteen);
+  EXPECT_EQ(argument.label(), test::Label::Tolerance);
+  EXPECT_EQ(argument.keys(), test::keys_floating_point_number());
+  EXPECT_EQ(argument.description(), "Tolerance value.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::OneOverThirtyTwo);
+  EXPECT_EQ(argument.default_values().at(1), test::OneOverSixtyFour);
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::OneOverEight);
+  EXPECT_EQ(argument.parsed_values().at(1), test::OneOverSixteen);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::OneOverEight);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::OneOverSixteen);
+  EXPECT_EQ(argument.keys_with_value_type(), "-t <value>, --tolerance <value>");
+  EXPECT_EQ(argument.usage(), "[--tolerance <value>]");
+  EXPECT_EQ(argument.options(), "-t <value>, --tolerance <value>  Tolerance value.");
+  EXPECT_EQ(
+      argument.execution(), "--tolerance 0.125000000000000000 --tolerance 0.0625000000000000000");
+}
+
+TEST(Lector, RepeatableArgumentFloatingPointNumberNamedRequired) {
+  lector::RepeatableArgument<test::Label::Tolerance, double> argument{
+    test::repeatable_argument_floating_point_number_named_required()};
+  EXPECT_EQ(argument.label(), test::Label::Tolerance);
+  EXPECT_EQ(argument.keys(), test::keys_floating_point_number());
+  EXPECT_EQ(argument.description(), "Tolerance value.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "-t <value>, --tolerance <value>");
+  EXPECT_EQ(argument.usage(), "--tolerance <value>");
+  EXPECT_EQ(argument.options(), "-t <value>, --tolerance <value>  Tolerance value.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::OneOverEight);
+  argument.set_parsed_value(test::OneOverSixteen);
+  EXPECT_EQ(argument.label(), test::Label::Tolerance);
+  EXPECT_EQ(argument.keys(), test::keys_floating_point_number());
+  EXPECT_EQ(argument.description(), "Tolerance value.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::OneOverEight);
+  EXPECT_EQ(argument.parsed_values().at(1), test::OneOverSixteen);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::OneOverEight);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::OneOverSixteen);
+  EXPECT_EQ(argument.keys_with_value_type(), "-t <value>, --tolerance <value>");
+  EXPECT_EQ(argument.usage(), "--tolerance <value>");
+  EXPECT_EQ(argument.options(), "-t <value>, --tolerance <value>  Tolerance value.");
+  EXPECT_EQ(
+      argument.execution(), "--tolerance 0.125000000000000000 --tolerance 0.0625000000000000000");
+}
+
+TEST(Lector, RepeatableArgumentFloatingPointNumberPositionalOptional) {
+  lector::RepeatableArgument<test::Label::Tolerance, double> argument{
+    test::repeatable_argument_floating_point_number_positional_optional()};
+  EXPECT_EQ(argument.label(), test::Label::Tolerance);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Tolerance value.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::OneOverThirtyTwo);
+  EXPECT_EQ(argument.default_values().at(1), test::OneOverSixtyFour);
+  EXPECT_TRUE(argument.parsed_values().empty());
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::OneOverThirtyTwo);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::OneOverSixtyFour);
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "[<value>]");
+  EXPECT_EQ(argument.options(), "<value>  Tolerance value.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::OneOverEight);
+  argument.set_parsed_value(test::OneOverSixteen);
+  EXPECT_EQ(argument.label(), test::Label::Tolerance);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Tolerance value.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  ASSERT_EQ(argument.default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.default_values().at(0), test::OneOverThirtyTwo);
+  EXPECT_EQ(argument.default_values().at(1), test::OneOverSixtyFour);
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::OneOverEight);
+  EXPECT_EQ(argument.parsed_values().at(1), test::OneOverSixteen);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::OneOverEight);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::OneOverSixteen);
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "[<value>]");
+  EXPECT_EQ(argument.options(), "<value>  Tolerance value.");
+  EXPECT_EQ(argument.execution(), "0.125000000000000000 0.0625000000000000000");
+}
+
+TEST(Lector, RepeatableArgumentFloatingPointNumberPositionalRequired) {
+  lector::RepeatableArgument<test::Label::Tolerance, double> argument{
+    test::repeatable_argument_floating_point_number_positional_required()};
+  EXPECT_EQ(argument.label(), test::Label::Tolerance);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Tolerance value.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  EXPECT_TRUE(argument.parsed_values().empty());
+  EXPECT_TRUE(argument.parsed_or_default_values().empty());
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "<value>");
+  EXPECT_EQ(argument.options(), "<value>  Tolerance value.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::OneOverEight);
+  argument.set_parsed_value(test::OneOverSixteen);
+  EXPECT_EQ(argument.label(), test::Label::Tolerance);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_EQ(argument.description(), "Tolerance value.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Repeatable);
+  EXPECT_TRUE(argument.default_values().empty());
+  ASSERT_EQ(argument.parsed_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_values().at(0), test::OneOverEight);
+  EXPECT_EQ(argument.parsed_values().at(1), test::OneOverSixteen);
+  ASSERT_EQ(argument.parsed_or_default_values().size(), static_cast<std::size_t>(2UL));
+  EXPECT_EQ(argument.parsed_or_default_values().at(0), test::OneOverEight);
+  EXPECT_EQ(argument.parsed_or_default_values().at(1), test::OneOverSixteen);
+  EXPECT_EQ(argument.keys_with_value_type(), "<value>");
+  EXPECT_EQ(argument.usage(), "<value>");
+  EXPECT_EQ(argument.options(), "<value>  Tolerance value.");
+  EXPECT_EQ(argument.execution(), "0.125000000000000000 0.0625000000000000000");
+}
+
 TEST(Lector, RepeatableArgumentIntegerDefault) {
   lector::RepeatableArgument<test::Label::Iterations, std::int32_t> argument;
   EXPECT_EQ(argument.label(), test::Label::Iterations);
@@ -4516,6 +5560,112 @@ TEST(Lector, SingularArgumentBooleanNamedOptional) {
   EXPECT_EQ(argument.usage(), "[--help]");
   EXPECT_EQ(argument.options(), "-h, --help  Display this help information and exit. Optional.");
   EXPECT_EQ(argument.execution(), "--help");
+}
+
+TEST(Lector, SingularArgumentConfusingLongDefault) {
+  lector::SingularArgument<test::Label::ConfusingLong, std::int32_t> argument;
+  EXPECT_EQ(argument.label(), test::Label::ConfusingLong);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_TRUE(argument.description().empty());
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_EQ(argument.default_value(), std::nullopt);
+  EXPECT_EQ(argument.parsed_value(), std::nullopt);
+  EXPECT_EQ(argument.keys_with_value_type(), "<number>");
+  EXPECT_EQ(argument.usage(), "<number>");
+  EXPECT_EQ(argument.options(), "<number>");
+  EXPECT_TRUE(argument.execution().empty());
+  EXPECT_ANY_THROW(static_cast<void>(argument.parsed_or_default_value()));
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::TwoHundred));
+}
+
+TEST(Lector, SingularArgumentConfusingLongMain) {
+  lector::SingularArgument<test::Label::ConfusingLong, std::int32_t> argument{
+    test::singular_argument_confusing_long()};
+  EXPECT_EQ(argument.label(), test::Label::ConfusingLong);
+  EXPECT_EQ(argument.keys(), test::keys_confusing_long());
+  EXPECT_EQ(argument.description(), "Long confusing argument.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == test::OneHundred);
+  EXPECT_EQ(argument.parsed_value(), std::nullopt);
+  EXPECT_EQ(argument.parsed_or_default_value(), test::OneHundred);
+  EXPECT_EQ(argument.keys_with_value_type(), "--key=200 <number>");
+  EXPECT_EQ(argument.usage(), "[--key=200 <number>]");
+  EXPECT_EQ(argument.options(), "--key=200 <number>  Long confusing argument.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::TwoHundred);
+  EXPECT_EQ(argument.label(), test::Label::ConfusingLong);
+  EXPECT_EQ(argument.keys(), test::keys_confusing_long());
+  EXPECT_EQ(argument.description(), "Long confusing argument.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == test::OneHundred);
+  EXPECT_TRUE(
+      argument.parsed_value().has_value() && argument.parsed_value().value() == test::TwoHundred);
+  EXPECT_EQ(argument.parsed_or_default_value(), test::TwoHundred);
+  EXPECT_EQ(argument.keys_with_value_type(), "--key=200 <number>");
+  EXPECT_EQ(argument.usage(), "[--key=200 <number>]");
+  EXPECT_EQ(argument.options(), "--key=200 <number>  Long confusing argument.");
+  EXPECT_EQ(argument.execution(), "--key=200 200");
+}
+
+TEST(Lector, SingularArgumentConfusingShortDefault) {
+  lector::SingularArgument<test::Label::ConfusingShort, std::int32_t> argument;
+  EXPECT_EQ(argument.label(), test::Label::ConfusingShort);
+  EXPECT_TRUE(argument.keys().empty());
+  EXPECT_TRUE(argument.description().empty());
+  EXPECT_EQ(argument.importance(), lector::Importance::Required);
+  EXPECT_EQ(argument.form(), lector::Form::Positional);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_EQ(argument.default_value(), std::nullopt);
+  EXPECT_EQ(argument.parsed_value(), std::nullopt);
+  EXPECT_EQ(argument.keys_with_value_type(), "<number>");
+  EXPECT_EQ(argument.usage(), "<number>");
+  EXPECT_EQ(argument.options(), "<number>");
+  EXPECT_TRUE(argument.execution().empty());
+  EXPECT_ANY_THROW(static_cast<void>(argument.parsed_or_default_value()));
+  EXPECT_ANY_THROW(argument.set_parsed_value(test::TwoHundred));
+}
+
+TEST(Lector, SingularArgumentConfusingShortMain) {
+  lector::SingularArgument<test::Label::ConfusingShort, std::int32_t> argument{
+    test::singular_argument_confusing_short()};
+  EXPECT_EQ(argument.label(), test::Label::ConfusingShort);
+  EXPECT_EQ(argument.keys(), test::keys_confusing_short());
+  EXPECT_EQ(argument.description(), "Short confusing argument.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == test::OneHundred);
+  EXPECT_EQ(argument.parsed_value(), std::nullopt);
+  EXPECT_EQ(argument.parsed_or_default_value(), test::OneHundred);
+  EXPECT_EQ(argument.keys_with_value_type(), "--key <number>");
+  EXPECT_EQ(argument.usage(), "[--key <number>]");
+  EXPECT_EQ(argument.options(), "--key <number>  Short confusing argument.");
+  EXPECT_TRUE(argument.execution().empty());
+  argument.set_parsed_value(test::TwoHundred);
+  EXPECT_EQ(argument.label(), test::Label::ConfusingShort);
+  EXPECT_EQ(argument.keys(), test::keys_confusing_short());
+  EXPECT_EQ(argument.description(), "Short confusing argument.");
+  EXPECT_EQ(argument.importance(), lector::Importance::Optional);
+  EXPECT_EQ(argument.form(), lector::Form::Named);
+  EXPECT_EQ(argument.arity(), lector::Arity::Singular);
+  EXPECT_TRUE(
+      argument.default_value().has_value() && argument.default_value().value() == test::OneHundred);
+  EXPECT_TRUE(
+      argument.parsed_value().has_value() && argument.parsed_value().value() == test::TwoHundred);
+  EXPECT_EQ(argument.parsed_or_default_value(), test::TwoHundred);
+  EXPECT_EQ(argument.keys_with_value_type(), "--key <number>");
+  EXPECT_EQ(argument.usage(), "[--key <number>]");
+  EXPECT_EQ(argument.options(), "--key <number>  Short confusing argument.");
+  EXPECT_EQ(argument.execution(), "--key 200");
 }
 
 TEST(Lector, SingularArgumentCopyAssignmentOperator) {
