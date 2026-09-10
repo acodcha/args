@@ -1859,7 +1859,7 @@ TEST(Lector, ArgumentsValidIndividualOutputDirectoryRequiredNoConfiguration) {
   expected_help << "Options:" << std::endl;
   expected_help << expected_options;
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(arguments.execution(), "/path/to/executable --output_directory \"/path/to/output\"");
+  EXPECT_EQ(arguments.execution(), "/path/to/executable --output_directory /path/to/output");
 }
 
 TEST(Lector, ArgumentsValidIndividualOutputDirectoryRequiredWithConfiguration) {
@@ -1886,7 +1886,7 @@ TEST(Lector, ArgumentsValidIndividualOutputDirectoryRequiredWithConfiguration) {
   expected_help << expected_options << std::endl << std::endl;
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(arguments.execution(), "/path/to/executable --output_directory \"/path/to/output\"");
+  EXPECT_EQ(arguments.execution(), "/path/to/executable --output_directory /path/to/output");
 }
 
 TEST(Lector, ArgumentsValidIndividualPointOptionalNoConfiguration) {
@@ -1951,7 +1951,7 @@ TEST(Lector, ArgumentsValidIndividualPointRequiredNoConfiguration) {
   expected_help << "Options:" << std::endl;
   expected_help << expected_options;
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(arguments.execution(), "/path/to/executable --point 4 5 6");
+  EXPECT_EQ(arguments.execution(), "/path/to/executable --point \"4 5 6\"");
 }
 
 TEST(Lector, ArgumentsValidIndividualPointRequiredWithConfiguration) {
@@ -1978,7 +1978,7 @@ TEST(Lector, ArgumentsValidIndividualPointRequiredWithConfiguration) {
   expected_help << expected_options << std::endl << std::endl;
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(arguments.execution(), "/path/to/executable --point 4 5 6");
+  EXPECT_EQ(arguments.execution(), "/path/to/executable --point \"4 5 6\"");
 }
 
 TEST(Lector, ArgumentsValidIndividualShapeOptionalNoConfiguration) {
@@ -2299,8 +2299,8 @@ TEST(Lector, ArgumentsValidManyInlineLongKeysNoConfiguration) {
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
-            "--iterations 200 --help");
+            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
+            "200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyInlineLongKeysWithConfiguration) {
@@ -2346,8 +2346,8 @@ TEST(Lector, ArgumentsValidManyInlineLongKeysWithConfiguration) {
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
-            "--iterations 200 --help");
+            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
+            "200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyInlineShortKeysNoConfiguration) {
@@ -2389,8 +2389,8 @@ TEST(Lector, ArgumentsValidManyInlineShortKeysNoConfiguration) {
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
-            "--iterations 200 --help");
+            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
+            "200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyInlineShortKeysWithConfiguration) {
@@ -2435,8 +2435,8 @@ TEST(Lector, ArgumentsValidManyInlineShortKeysWithConfiguration) {
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
-            "--iterations 200 --help");
+            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
+            "200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyMixedLongKeysNoConfiguration) {
@@ -2479,8 +2479,8 @@ TEST(Lector, ArgumentsValidManyMixedLongKeysNoConfiguration) {
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
-            "--iterations 200 --help");
+            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
+            "200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyMixedLongKeysWithConfiguration) {
@@ -2526,8 +2526,8 @@ TEST(Lector, ArgumentsValidManyMixedLongKeysWithConfiguration) {
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
-            "--iterations 200 --help");
+            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
+            "200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyMixedShortKeysNoConfiguration) {
@@ -2569,8 +2569,8 @@ TEST(Lector, ArgumentsValidManyMixedShortKeysNoConfiguration) {
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
-            "--iterations 200 --help");
+            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
+            "200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyMixedShortKeysWithConfiguration) {
@@ -2615,8 +2615,8 @@ TEST(Lector, ArgumentsValidManyMixedShortKeysWithConfiguration) {
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
-            "--iterations 200 --help");
+            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
+            "200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyPositionalNoConfiguration) {
@@ -2656,8 +2656,8 @@ TEST(Lector, ArgumentsValidManyPositionalNoConfiguration) {
   expected_help << "Options:" << std::endl;
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(arguments.execution(),
-            "/path/to/executable Circle \"/path/to/output\" --iterations 200 --help");
+  EXPECT_EQ(
+      arguments.execution(), "/path/to/executable Circle /path/to/output --iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyPositionalWithConfiguration) {
@@ -2700,8 +2700,8 @@ TEST(Lector, ArgumentsValidManyPositionalWithConfiguration) {
   expected_help << expected_options.str() << std::endl << std::endl;
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(arguments.execution(),
-            "/path/to/executable Circle \"/path/to/output\" --iterations 200 --help");
+  EXPECT_EQ(
+      arguments.execution(), "/path/to/executable Circle /path/to/output --iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyWhitespaceLongKeysNoConfiguration) {
@@ -2744,8 +2744,8 @@ TEST(Lector, ArgumentsValidManyWhitespaceLongKeysNoConfiguration) {
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
-            "--iterations 200 --help");
+            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
+            "200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyWhitespaceLongKeysWithConfiguration) {
@@ -2791,8 +2791,8 @@ TEST(Lector, ArgumentsValidManyWhitespaceLongKeysWithConfiguration) {
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
-            "--iterations 200 --help");
+            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
+            "200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyWhitespaceShortKeysNoConfiguration) {
@@ -2834,8 +2834,8 @@ TEST(Lector, ArgumentsValidManyWhitespaceShortKeysNoConfiguration) {
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
-            "--iterations 200 --help");
+            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
+            "200 --help");
 }
 
 TEST(Lector, ArgumentsValidManyWhitespaceShortKeysWithConfiguration) {
@@ -2880,8 +2880,8 @@ TEST(Lector, ArgumentsValidManyWhitespaceShortKeysWithConfiguration) {
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --shape Circle --output_directory \"/path/to/output\" "
-            "--iterations 200 --help");
+            "/path/to/executable --shape Circle --output_directory /path/to/output --iterations "
+            "200 --help");
 }
 
 TEST(Lector, ArgumentsValidSeveralIterationsIterationsAgainNoConfiguration) {
@@ -3037,8 +3037,7 @@ TEST(Lector, ArgumentsValidSeveralOutputDirectoryHelpNoConfiguration) {
   expected_help << "Options:" << std::endl;
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(
-      arguments.execution(), "/path/to/executable --output_directory \"/path/to/output\" --help");
+  EXPECT_EQ(arguments.execution(), "/path/to/executable --output_directory /path/to/output --help");
 }
 
 TEST(Lector, ArgumentsValidSeveralOutputDirectoryHelpWithConfiguration) {
@@ -3072,8 +3071,7 @@ TEST(Lector, ArgumentsValidSeveralOutputDirectoryHelpWithConfiguration) {
   expected_help << expected_options.str() << std::endl << std::endl;
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
-  EXPECT_EQ(
-      arguments.execution(), "/path/to/executable --output_directory \"/path/to/output\" --help");
+  EXPECT_EQ(arguments.execution(), "/path/to/executable --output_directory /path/to/output --help");
 }
 
 TEST(Lector, ArgumentsValidSeveralOutputDirectoryIterationsHelpNoConfiguration) {
@@ -3111,7 +3109,7 @@ TEST(Lector, ArgumentsValidSeveralOutputDirectoryIterationsHelpNoConfiguration) 
   expected_help << expected_options.str();
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --output_directory \"/path/to/output\" --iterations 200 --help");
+            "/path/to/executable --output_directory /path/to/output --iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsValidSeveralOutputDirectoryIterationsHelpWithConfiguration) {
@@ -3152,7 +3150,7 @@ TEST(Lector, ArgumentsValidSeveralOutputDirectoryIterationsHelpWithConfiguration
   expected_help << "Additional notes for the application for testing the lector library.";
   EXPECT_EQ(arguments.help(), expected_help.str());
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --output_directory \"/path/to/output\" --iterations 200 --help");
+            "/path/to/executable --output_directory /path/to/output --iterations 200 --help");
 }
 
 TEST(Lector, ArgumentsWeirdLongInlineNoConfiguration) {
@@ -4683,7 +4681,7 @@ TEST(Lector, SingularArgumentDataStructureNamedOptional) {
   EXPECT_EQ(argument.keys_with_value_type(), "-p <value>, --point <value>");
   EXPECT_EQ(argument.usage(), "[--point <value>]");
   EXPECT_EQ(argument.options(), "-p <value>, --point <value>  Starting point.");
-  EXPECT_EQ(argument.execution(), "--point 4 5 6");
+  EXPECT_EQ(argument.execution(), "--point \"4 5 6\"");
 }
 
 TEST(Lector, SingularArgumentDataStructureNamedRequired) {
@@ -4736,7 +4734,7 @@ TEST(Lector, SingularArgumentDataStructurePositionalOptional) {
   EXPECT_EQ(argument.keys_with_value_type(), "<value>");
   EXPECT_EQ(argument.usage(), "[<value>]");
   EXPECT_EQ(argument.options(), "<value>  Starting point.");
-  EXPECT_EQ(argument.execution(), "4 5 6");
+  EXPECT_EQ(argument.execution(), "\"4 5 6\"");
 }
 
 TEST(Lector, SingularArgumentDataStructurePositionalRequired) {
@@ -4931,7 +4929,7 @@ TEST(Lector, SingularArgumentFilesystemPathNamedOptional) {
   EXPECT_EQ(argument.keys_with_value_type(), "-o <path>, --output_directory <path>");
   EXPECT_EQ(argument.usage(), "[--output_directory <path>]");
   EXPECT_EQ(argument.options(), "-o <path>, --output_directory <path>  Output directory.");
-  EXPECT_EQ(argument.execution(), "--output_directory \"/some/other/path\"");
+  EXPECT_EQ(argument.execution(), "--output_directory /some/other/path");
 }
 
 TEST(Lector, SingularArgumentFilesystemPathNamedRequired) {
@@ -4984,7 +4982,7 @@ TEST(Lector, SingularArgumentFilesystemPathPositionalOptional) {
   EXPECT_EQ(argument.keys_with_value_type(), "<path>");
   EXPECT_EQ(argument.usage(), "[<path>]");
   EXPECT_EQ(argument.options(), "<path>  Output directory.");
-  EXPECT_EQ(argument.execution(), "\"/some/other/path\"");
+  EXPECT_EQ(argument.execution(), "/some/other/path");
 }
 
 TEST(Lector, SingularArgumentFilesystemPathPositionalRequired) {
@@ -5660,7 +5658,7 @@ TEST(Lector, TutorialSection1Basic) {
   };
   EXPECT_EQ(arguments.help(), expected_help);
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable --output_directory \"/path/to/directory\" --iterations 200");
+            "/path/to/executable --output_directory /path/to/directory --iterations 200");
 }
 
 TEST(Lector, TutorialSection1Help) {
@@ -5715,9 +5713,8 @@ TEST(Lector, TutorialSection1Help) {
     "Additional notes about my application."
   };
   EXPECT_EQ(arguments.help(), expected_help);
-  EXPECT_EQ(
-      arguments.execution(),
-      "/path/to/executable --output_directory \"/path/to/directory\" --iterations 200 --help");
+  EXPECT_EQ(arguments.execution(),
+            "/path/to/executable --output_directory /path/to/directory --iterations 200 --help");
 }
 
 TEST(Lector, TutorialSection3Subsection2) {
@@ -5757,7 +5754,7 @@ TEST(Lector, TutorialSection3Subsection2) {
   };
   EXPECT_EQ(arguments.help(), expected_help);
   EXPECT_EQ(arguments.execution(),
-            "/path/to/executable __out_dir__ \"/path/to/directory\" ==iterations== 200");
+            "/path/to/executable __out_dir__ /path/to/directory ==iterations== 200");
 }
 
 TEST(Lector, TutorialSection3Subsection3) {

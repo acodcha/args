@@ -162,6 +162,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a7bf0153785e48f2ff2b2f6eb975f2b49" id="r_a7bf0153785e48f2ff2b2f6eb975f2b49"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelector.html#a7bf0153785e48f2ff2b2f6eb975f2b49">collate_and_right_align</a> (const std::string_view first_column_text, const std::size_t first_column_width, const std::string_view second_column_text, const std::size_t second_column_width)</td></tr>
 <tr class="memdesc:a7bf0153785e48f2ff2b2f6eb975f2b49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collates two strings of text, each representing a column, into a single string that contains newline-separated lines of text, with the lines formatted such that the two columns are right-aligned and spaced a short distance apart.  <br /></td></tr>
 <tr class="separator:a7bf0153785e48f2ff2b2f6eb975f2b49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad87c2fdee65b8abf36a7cb5762f75392" id="r_ad87c2fdee65b8abf36a7cb5762f75392"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelector.html#ad87c2fdee65b8abf36a7cb5762f75392">contains_whitespace</a> (const std::string_view text)</td></tr>
+<tr class="memdesc:ad87c2fdee65b8abf36a7cb5762f75392"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether a string of text contains any whitespace characters.  <br /></td></tr>
+<tr class="separator:ad87c2fdee65b8abf36a7cb5762f75392"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12fbadda4745d3082c5f7504bd22862a" id="r_a12fbadda4745d3082c5f7504bd22862a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelector.html#a12fbadda4745d3082c5f7504bd22862a">is_leading_byte</a> (const char character)</td></tr>
 <tr class="memdesc:a12fbadda4745d3082c5f7504bd22862a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether a given character is the leading byte of a UTF-8 character. All UTF-8 characters measure either one, two, three, or four bytes. UTF-8 characters that measure only one byte are the ASCII characters. UTF-8 character that measure two, three, or four bytes are multi-byte characters and consist of a leading byte with a specific binary pattern and one or more continuation bytes of the binary pattern 10xxxxxx.  <br /></td></tr>
 <tr class="separator:a12fbadda4745d3082c5f7504bd22862a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -322,6 +325,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a2e485bdacc529d35c78a74e95ff5a065"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::string_view&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelector.html#a2e485bdacc529d35c78a74e95ff5a065">print_enumeration</a> (const EnumerationType value)</td></tr>
 <tr class="memdesc:a2e485bdacc529d35c78a74e95ff5a065"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints a value of a specified enumeration type as a string of text. The enumeration type must define a specialization of the <a class="el" href="namespacelector.html#a1323f11a0134e8de8f3d0ed1dd5c4f08" title="Map of canonical printed names to their corresponding values of a specified type.">lector::Names</a> constant for its type.  <br /></td></tr>
 <tr class="separator:a2e485bdacc529d35c78a74e95ff5a065"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb15cff6794e48b5def2229017b28730" id="r_acb15cff6794e48b5def2229017b28730"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelector.html#acb15cff6794e48b5def2229017b28730">quote</a> (const std::string_view text)</td></tr>
+<tr class="memdesc:acb15cff6794e48b5def2229017b28730"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encloses a string of text in quotes. Either single or double quotes are used depending on which type of quote is not present in the string of text, with double quotes preferred if neither type of quote is present. If the string of text already begins and ends with either single or double quotes, no additional quotes are added. If the string of text is empty, an empty string is returned.  <br /></td></tr>
+<tr class="separator:acb15cff6794e48b5def2229017b28730"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1266389b876d90b1ec86703ab6bc3829" id="r_a1266389b876d90b1ec86703ab6bc3829"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelector.html#a1266389b876d90b1ec86703ab6bc3829">quote_if_contains_whitespace</a> (const std::string_view text)</td></tr>
+<tr class="memdesc:a1266389b876d90b1ec86703ab6bc3829"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encloses a string of text in quotes if it contains any whitespace. Either single or double quotes are used depending on which type of quote is not present in the string of text, with double quotes preferred if neither type of quote is present. If the string of text already begins and ends with either single or double quotes, no additional quotes are added. If the string of text is empty, an empty string is returned.  <br /></td></tr>
+<tr class="separator:a1266389b876d90b1ec86703ab6bc3829"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9603ee0e67412a724ad26f78688d46da" id="r_a9603ee0e67412a724ad26f78688d46da"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string_view &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelector.html#a9603ee0e67412a724ad26f78688d46da">tokenize</a> (const std::string_view text)</td></tr>
 <tr class="memdesc:a9603ee0e67412a724ad26f78688d46da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tokenizes a string of text into a vector of strings of text, where each string in the vector corresponds to a word in the original string. Words are defined as sequences of non-whitespace characters, and whitespace characters are used as delimiters. The function does not modify the original string and returns views into it, so the original string must remain valid for the lifetime of the returned vector.  <br /></td></tr>
 <tr class="separator:a9603ee0e67412a724ad26f78688d46da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -789,6 +798,33 @@ template&lt;typename Type &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ad87c2fdee65b8abf36a7cb5762f75392" name="ad87c2fdee65b8abf36a7cb5762f75392"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad87c2fdee65b8abf36a7cb5762f75392">&#9670;&#160;</a></span>contains_whitespace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool lector::contains_whitespace </td>
+          <td>(</td>
+          <td class="paramtype">const std::string_view&#160;</td>
+          <td class="paramname"><em>text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks whether a string of text contains any whitespace characters. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">text</td><td>The string of text to examine. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the string of text contains any whitespace, or false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -2061,6 +2097,72 @@ template&lt;typename EnumerationType &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The value as a printed string of text. </dd></dl>
+
+</div>
+</div>
+<a id="acb15cff6794e48b5def2229017b28730" name="acb15cff6794e48b5def2229017b28730"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb15cff6794e48b5def2229017b28730">&#9670;&#160;</a></span>quote()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string lector::quote </td>
+          <td>(</td>
+          <td class="paramtype">const std::string_view&#160;</td>
+          <td class="paramname"><em>text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Encloses a string of text in quotes. Either single or double quotes are used depending on which type of quote is not present in the string of text, with double quotes preferred if neither type of quote is present. If the string of text already begins and ends with either single or double quotes, no additional quotes are added. If the string of text is empty, an empty string is returned. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">text</td><td>The string of text to enclose in quotes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The string of text enclosed in quotes. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string of text contains both single and double quotes. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1266389b876d90b1ec86703ab6bc3829" name="a1266389b876d90b1ec86703ab6bc3829"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1266389b876d90b1ec86703ab6bc3829">&#9670;&#160;</a></span>quote_if_contains_whitespace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string lector::quote_if_contains_whitespace </td>
+          <td>(</td>
+          <td class="paramtype">const std::string_view&#160;</td>
+          <td class="paramname"><em>text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Encloses a string of text in quotes if it contains any whitespace. Either single or double quotes are used depending on which type of quote is not present in the string of text, with double quotes preferred if neither type of quote is present. If the string of text already begins and ends with either single or double quotes, no additional quotes are added. If the string of text is empty, an empty string is returned. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">text</td><td>The string of text to possibly enclose in quotes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The string of text possibly enclosed in quotes. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the string of text contains both single and double quotes. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
