@@ -393,7 +393,7 @@ path/to/my_application --output_directory /some/path --iterations 200
 
 ```text
 Execution:
-path/to/my_application --output_directory "/some/path" --iterations 200
+path/to/my_application --output_directory /some/path --iterations 200
 The output directory is: /some/path
 The number of iterations is: 200
 ```
@@ -408,7 +408,7 @@ path/to/my_application --output_directory=/some/path --iterations=200
 
 ```text
 Execution:
-path/to/my_application --output_directory "/some/path" --iterations 200
+path/to/my_application --output_directory /some/path --iterations 200
 The output directory is: /some/path
 The number of iterations is: 200
 ```
@@ -421,7 +421,7 @@ path/to/my_application -o /some/path -i=200
 
 ```text
 Execution:
-path/to/my_application --output_directory "/some/path" --iterations 200
+path/to/my_application --output_directory /some/path --iterations 200
 The output directory is: /some/path
 The number of iterations is: 200
 ```
@@ -443,7 +443,7 @@ path/to/my_application __out_dir__ /some/path =i= 200
 
 ```text
 Execution:
-path/to/my_application __out_dir__ "/some/path" ==iterations== 200
+path/to/my_application __out_dir__ /some/path ==iterations== 200
 The output directory is: /some/path
 The number of iterations is: 200
 ```

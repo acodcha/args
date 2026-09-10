@@ -347,6 +347,18 @@ TEST(Lector, CollateAndRightAlignVeryLongWord) {
       "                column.");
 }
 
+TEST(Lector, ContainsWhitespace) {
+  EXPECT_FALSE(lector::contains_whitespace(""));
+  EXPECT_TRUE(lector::contains_whitespace(" "));
+  EXPECT_TRUE(lector::contains_whitespace("\t"));
+  EXPECT_TRUE(lector::contains_whitespace("\n"));
+  EXPECT_TRUE(lector::contains_whitespace("\v"));
+  EXPECT_TRUE(lector::contains_whitespace("\f"));
+  EXPECT_TRUE(lector::contains_whitespace("\r"));
+  EXPECT_FALSE(lector::contains_whitespace("Hello!"));
+  EXPECT_TRUE(lector::contains_whitespace("Hello, world!"));
+}
+
 TEST(Lector, IsLeadingByte) {
   EXPECT_TRUE(lector::is_leading_byte('\0'));
   EXPECT_TRUE(lector::is_leading_byte('\x01'));
@@ -804,6 +816,34 @@ TEST(Lector, PadRightWhitespace) {
   EXPECT_EQ(lector::pad_right("\t", 10), "\t         ");
   EXPECT_EQ(lector::pad_right("\n", 10), "\n         ");
   EXPECT_EQ(lector::pad_right(" \t\n \t\n", 10), " \t\n \t\n    ");
+}
+
+TEST(Lector, QuoteBasicAlreadyContainsQuotes) {
+  EXPECT_EQ(lector::quote("Hello, world!'"), "\"Hello, world!'\"");
+  EXPECT_EQ(lector::quote("Hello, world!\""), "'Hello, world!\"'");
+}
+
+TEST(Lector, QuoteBasicAlreadyEnclosedInQuotes) {
+  EXPECT_EQ(lector::quote("'Hello, world!'"), "'Hello, world!'");
+  EXPECT_EQ(lector::quote("\"Hello, world!\""), "\"Hello, world!\"");
+}
+
+TEST(Lector, QuoteBasicEmpty) {
+  EXPECT_EQ(lector::quote(""), "");
+}
+
+TEST(Lector, QuoteBasicInvalid) {
+  EXPECT_ANY_THROW((void)lector::quote("'\""));
+}
+
+TEST(Lector, QuoteBasicPreferDoubleQuotes) {
+  EXPECT_EQ(lector::quote("Hello, world!"), "\"Hello, world!\"");
+}
+
+TEST(Lector, QuoteIfContainsWhitespace) {
+  EXPECT_EQ(lector::quote_if_contains_whitespace(""), "");
+  EXPECT_EQ(lector::quote_if_contains_whitespace("Hello!"), "Hello!");
+  EXPECT_EQ(lector::quote_if_contains_whitespace("Hello, world!"), "\"Hello, world!\"");
 }
 
 TEST(Lector, Tokenize) {

@@ -57,22 +57,8 @@ namespace lector {
   // Cast to an unsigned character to avoid undefined behavior with bitwise operations on signed
   // characters. The binary pattern 10xxxxxx that identifies a continuation byte ranges from 0x80 to
   // 0xBF in hexadecimal notation.
-  return (static_cast<unsigned char>(character) & 0xC0) != 0x80;
-}
-
-/// @brief Counts and returns the number of UTF-8 code points in a string of text. The number of
-/// UTF-8 code points is a useful approximation of the number of graphemes in the string, where
-/// ASCII characters and multi-byte UTF-8 characters are each counted as one unit of length.
-/// @param[in] text The string of text whose UTF-8 code points are to be counted.
-/// @return The number of UTF-8 code points in the string of text.
-[[nodiscard]] inline std::size_t code_points(const std::string_view text) {
-  std::size_t count{0UL};
-  for (const char character : text) {
-    if (lector::is_leading_byte(character)) {
-      ++count;
-    }
-  }
-  return count;
+  return (static_cast<unsigned char>(character) & static_cast<unsigned char>(0xC0))
+         != static_cast<unsigned char>(0x80);
 }
 
 /// @brief Finds the exact byte [begin, end) index interval in a string of text where a specified
@@ -108,6 +94,21 @@ namespace lector {
   return std::pair<std::size_t, std::size_t>{text.size(), text.size()};
 }
 
+/// @brief Counts and returns the number of UTF-8 code points in a string of text. The number of
+/// UTF-8 code points is a useful approximation of the number of graphemes in the string, where
+/// ASCII characters and multi-byte UTF-8 characters are each counted as one unit of length.
+/// @param[in] text The string of text whose UTF-8 code points are to be counted.
+/// @return The number of UTF-8 code points in the string of text.
+[[nodiscard]] inline std::size_t code_points(const std::string_view text) {
+  std::size_t count{0UL};
+  for (const char character : text) {
+    if (lector::is_leading_byte(character)) {
+      ++count;
+    }
+  }
+  return count;
+}
+
 /// @brief Computes and returns the length of the longest word in a string of text. The length of a
 /// word is measured by its number of UTF-8 code points.
 /// @param[in] text The string of text whose longest word length is to be computed.
@@ -139,6 +140,66 @@ namespace lector {
     current_longest_word_length = std::max(current_longest_word_length, current_word_length);
   }
   return current_longest_word_length;
+}
+
+/// @brief Checks whether a string of text contains any whitespace characters.
+/// @param[in] text The string of text to examine.
+/// @return true if the string of text contains any whitespace, or false otherwise.
+[[nodiscard]] inline bool contains_whitespace(const std::string_view text) {
+  return text.find_first_of(" \t\n\v\f\r") != std::string_view::npos;
+}
+
+/// @brief Encloses a string of text in quotes. Either single or double quotes are used depending on
+/// which type of quote is not present in the string of text, with double quotes preferred if
+/// neither type of quote is present. If the string of text already begins and ends with either
+/// single or double quotes, no additional quotes are added. If the string of text is empty, an
+/// empty string is returned.
+/// @param[in] text The string of text to enclose in quotes.
+/// @return The string of text enclosed in quotes.
+/// @throws std::invalid_argument if the string of text contains both single and double quotes.
+[[nodiscard]] inline std::string quote(const std::string_view text) {
+  if (text.empty()) {
+    return std::string{""};
+  }
+  if (text.size() >= static_cast<std::size_t>(2UL) && (text.front() == '"' || text.front() == '\'')
+      && text.front() == text.back()) {
+    return std::string{text};
+  }
+  bool contains_single_quotes{false};
+  bool contains_double_quotes{false};
+  for (const char character : text) {
+    if (character == '\'') {
+      contains_single_quotes = true;
+    } else if (character == '"') {
+      contains_double_quotes = true;
+    }
+    if (contains_single_quotes && contains_double_quotes) {
+      throw std::invalid_argument(
+          "String contains both single and double quotes: " + std::string{text});
+    }
+  }
+  const char quote_character{contains_double_quotes ? '\'' : '"'};
+  std::string result;
+  result.reserve(text.size() + 2);
+  result.push_back(quote_character);
+  result.append(text);
+  result.push_back(quote_character);
+  return result;
+}
+
+/// @brief Encloses a string of text in quotes if it contains any whitespace. Either single or
+/// double quotes are used depending on which type of quote is not present in the string of text,
+/// with double quotes preferred if neither type of quote is present. If the string of text already
+/// begins and ends with either single or double quotes, no additional quotes are added. If the
+/// string of text is empty, an empty string is returned.
+/// @param[in] text The string of text to possibly enclose in quotes.
+/// @return The string of text possibly enclosed in quotes.
+/// @throws std::invalid_argument if the string of text contains both single and double quotes.
+[[nodiscard]] inline std::string quote_if_contains_whitespace(const std::string_view text) {
+  if (lector::contains_whitespace(text)) {
+    return lector::quote(text);
+  }
+  return std::string(text);
 }
 
 /// @brief Tokenizes a string of text into a vector of strings of text, where each string in the

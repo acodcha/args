@@ -181,7 +181,7 @@ public:
   /// @param[in] description The description of the command line argument.
   /// @throws std::invalid_argument if this argument's type is boolean or if its description is
   /// empty.
-  SingularArgument(const std::string_view description) : description_{description} {
+  explicit SingularArgument(const std::string_view description) : description_{description} {
     validate_non_boolean_positional();
     validate_description();
   }
@@ -543,17 +543,11 @@ private:
   /// argument.
   [[nodiscard]] std::string execution_non_boolean() const {
     if (parsed_value_.has_value()) {
-      std::string parsed_value_string;
-      if constexpr (std::is_same_v<Type, std::string> || std::is_same_v<Type, std::string_view>
-                    || std::is_same_v<Type, std::filesystem::path>) {
-        parsed_value_string = "\"" + lector::print<Type>(parsed_value_.value()) + "\"";
-      } else {
-        parsed_value_string = lector::print<Type>(parsed_value_.value());
-      }
       if (keys_.empty()) {
-        return parsed_value_string;
+        return lector::quote_if_contains_whitespace(lector::print<Type>(parsed_value_.value()));
       }
-      return longest_key() + " " + parsed_value_string;
+      return longest_key() + " "
+             + lector::quote_if_contains_whitespace(lector::print<Type>(parsed_value_.value()));
     }
     return std::string{};
   }
@@ -597,7 +591,7 @@ public:
   /// values are needed.
   /// @param[in] description The description of the command line argument.
   /// @throws std::invalid_argument if the type is boolean or if the description is empty.
-  RepeatableArgument(const std::string_view description) : description_{description} {
+  explicit RepeatableArgument(const std::string_view description) : description_{description} {
     validate_non_boolean_positional();
     validate_description();
   }
@@ -947,14 +941,7 @@ private:
         if (!result.empty()) {
           result.push_back(' ');
         }
-        std::string parsed_value_string;
-        if constexpr (std::is_same_v<Type, std::string> || std::is_same_v<Type, std::string_view>
-                      || std::is_same_v<Type, std::filesystem::path>) {
-          parsed_value_string = "\"" + lector::print<Type>(parsed_value) + "\"";
-        } else {
-          parsed_value_string = lector::print<Type>(parsed_value);
-        }
-        result.append(parsed_value_string);
+        result.append(lector::quote_if_contains_whitespace(lector::print<Type>(parsed_value)));
       }
       return result;
     }
@@ -965,14 +952,7 @@ private:
       }
       result.append(longest_key());
       result.push_back(' ');
-      std::string parsed_value_string;
-      if constexpr (std::is_same_v<Type, std::string> || std::is_same_v<Type, std::string_view>
-                    || std::is_same_v<Type, std::filesystem::path>) {
-        parsed_value_string = "\"" + lector::print<Type>(parsed_value) + "\"";
-      } else {
-        parsed_value_string = lector::print<Type>(parsed_value);
-      }
-      result.append(parsed_value_string);
+      result.append(lector::quote_if_contains_whitespace(lector::print<Type>(parsed_value)));
     }
     return result;
   }
